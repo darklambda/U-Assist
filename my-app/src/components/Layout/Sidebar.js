@@ -1,4 +1,4 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
+import logo200Image from 'assets/img/logo/logo_u-assist.jpg';
 import sidebarBgImage from 'assets/img/sidebar/sidebar-4.jpg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
@@ -38,8 +38,6 @@ import {
 import bn from 'utils/bemnames';
 
 const sidebarBackground = {
-  backgroundImage: `url("${sidebarBgImage}")`,
-  backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
 };
 
@@ -121,7 +119,7 @@ class Sidebar extends React.Component {
                 alt=""
               />
               <span className="text-white">
-                Reduction <FaGithub />
+                U-Assist
               </span>
             </SourceLink>
           </Navbar>
