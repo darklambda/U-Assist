@@ -72,7 +72,7 @@ const genPieData = () => {
 
 const ChartPage = () => {
   return (
-    <Page title="Charts" breadcrumbs={[{ name: 'Charts', active: true }]}>
+    <Page title="Estadísticas" breadcrumbs={[{ name: 'Charts', active: true }]}>
       <Row>
         <Col xl={6} lg={12} md={12}>
           <Card>

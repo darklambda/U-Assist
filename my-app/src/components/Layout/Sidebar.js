@@ -33,31 +33,6 @@ const sidebarBackground = {
   backgroundRepeat: 'no-repeat',
 };
 
-const navComponents = [
-  { to: '/buttons', name: 'buttons', exact: false, Icon: MdRadioButtonChecked },
-  {
-    to: '/button-groups',
-    name: 'button groups',
-    exact: false,
-    Icon: MdGroupWork,
-  },
-  { to: '/forms', name: 'forms', exact: false, Icon: MdChromeReaderMode },
-  { to: '/input-groups', name: 'input groups', exact: false, Icon: MdViewList },
-  {
-    to: '/dropdowns',
-    name: 'dropdowns',
-    exact: false,
-    Icon: MdArrowDropDownCircle,
-  },
-  { to: '/badges', name: 'badges', exact: false, Icon: MdStar },
-  { to: '/alerts', name: 'alerts', exact: false, Icon: MdNotificationsActive },
-  { to: '/progress', name: 'progress', exact: false, Icon: MdBrush },
-  { to: '/modals', name: 'modals', exact: false, Icon: MdViewDay },
-];
-
-const navContents = [
-  { to: '/tables', name: 'tables', exact: false, Icon: MdBorderAll },
-];
 
 const pageContents = [
   { to: '/login', name: 'login / signup', exact: false, Icon: MdAccountCircle },
@@ -66,7 +41,7 @@ const pageContents = [
 const navItems = [
   { to: '/atencion', name:'ver pantalla del cliente', exact: true, Icon:MdDashboard},
   { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
-  { to: '/charts', name: 'charts', exact: false, Icon: MdInsertChart },
+  { to: '/charts', name: 'Estadísticas', exact: false, Icon: MdInsertChart },
   ];
 
 const bem = bn.create('sidebar');
@@ -102,9 +77,9 @@ class Sidebar extends React.Component {
                 className="pr-2"
                 alt=""
               />
-              <h2 className="text-white">
+              <h1 className="text-white">
                 U-Assist
-              </h2>
+              </h1>
             </SourceLink>
           </Navbar>
           <Nav vertical>
@@ -123,8 +98,23 @@ class Sidebar extends React.Component {
                 </BSNavLink>
               </NavItem>
             ))}
-
-            
+            <Collapse isOpen={this.state.isOpenPages}>
+              {pageContents.map(({ to, name, exact, Icon }, index) => (
+                <NavItem key={index} className={bem.e('nav-item')}>
+                  <BSNavLink
+                    id={`navItem-${name}-${index}`}
+                    className="text-uppercase"
+                    tag={NavLink}
+                    to={to}
+                    activeClassName="active"
+                    exact={exact}
+                  >
+                    <Icon className={bem.e('nav-item-icon')} />
+                    <span className="">{name}</span>
+                  </BSNavLink>
+                </NavItem>
+              ))}
+            </Collapse>
           </Nav>
         </div>
       </aside>
