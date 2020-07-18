@@ -10,7 +10,8 @@ export const types = {
     AUTH_LOGOUT:                'Cierre de sesión de usuario',
 
     REQUEST_CREATION:           'Registro de solicitud en BD',
-    REQUEST_FINISH_CREATION:    'Proceso de ingreso finalizado',
+    REQUEST_SET_ACTIVE:         'Activar solicitud para hacer operaciones CRUD',
+    REQUEST_LOADED:             'Obtener las request del usuario desde la BD',
 
     UI_OPEN_NEW_REQUEST_MODAL:  'Abrir modal nueva request',
     UI_CLOSE_NEW_REQUEST_MODAL: 'Cerrar modal nueva request'

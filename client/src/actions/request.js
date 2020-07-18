@@ -20,7 +20,23 @@ export const createRequest = (event) => {
     }
 }
 
-const newRequest = (data) => ({
-    type: types.REQUEST_CREATION,
-    payload: data
-})
+export const requestStartLoading = (event) => {
+    return async(dispatch) => {
+        try {
+            const resp = await fetchConToken('requests', event);
+            const body = await resp.json();
+
+            if (body.ok) {
+                dispatch( requestLoaded(body.requests) );
+            } else {
+                Swal.fire('', body.errors.descripcionProblema.msg, 'error');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+const requestLoaded = (data) => ({type: types.REQUEST_LOADED, payload:data});
+const newRequest    = (data) => ({type: types.REQUEST_CREATION, payload: data});
+// const activeRequest = (data) => ({type: types.REQUEST_SET_ACTIVE, payload:data});

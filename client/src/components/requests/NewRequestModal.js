@@ -27,17 +27,16 @@ export const NewRequestModal = () => {
 	}
 
 	return (
-	<Modal
-	isOpen={isOpen}
-	//   onAfterOpen={afterOpenModal}
-	onRequestClose={closeModal}
-	style={customStyles}
-	className="modal"
-	overlayClassName="modal-fondo"
-	closeTimeoutMS={200}
-	>
-	<RequestScreen />
+		<Modal
+			isOpen={isOpen}
+			onRequestClose={closeModal}
+			style={customStyles}
+			className="modal"
+			overlayClassName="modal-fondo"
+			closeTimeoutMS={200}
+		>
+			<RequestScreen />
 
-	</Modal>
-	)
+		</Modal>
+		)
 }

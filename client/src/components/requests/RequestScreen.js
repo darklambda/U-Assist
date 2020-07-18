@@ -7,8 +7,6 @@ import { uiCloseModal } from '../../actions/ui';
 
 export const RequestScreen = () => {
 
-    
-
     const dispatch = useDispatch();
 
     const [formValues, handleInputChange] = useForm({

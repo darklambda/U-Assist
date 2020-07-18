@@ -3,8 +3,10 @@
 import { combineReducers } from "redux";
 import { authReducer } from "./authReducer";
 import { uiReducer } from "./uiReducer";
+import { requestReducer } from "./requestReducer";
 
 export const rootReducer = combineReducers({
     auth: authReducer,
-    ui: uiReducer
+    ui: uiReducer,
+    reqs: requestReducer
 });
