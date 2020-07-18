@@ -3,8 +3,11 @@ import { useDispatch } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
 import { createRequest } from '../../actions/request';
 import './request.css';
+import { uiCloseModal } from '../../actions/ui';
 
 export const RequestScreen = () => {
+
+    
 
     const dispatch = useDispatch();
 
@@ -18,12 +21,13 @@ export const RequestScreen = () => {
     const handleSubmitForm = (e) => {
         e.preventDefault();
         dispatch(createRequest(formValues));
+        dispatch(uiCloseModal());
     }
 
     const categorias = ["Baja", "Media", "Alta"];
 
     return (
-            <div className="container solicitud-contanier">
+            <div className="container align-items-center">
                 <div className="testbox">
                     <form onSubmit= { handleSubmitForm } >
                         <h3>Ingreso de Solicitud</h3>
