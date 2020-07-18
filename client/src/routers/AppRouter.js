@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import {
     BrowserRouter as Router,
-    Switch,
-    Route,
-    Redirect
+    Switch
   } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppScreen } from '../components/requests/AppScreen'
 import { LoginScreen } from '../components/auth/LoginScreen';
 import { RegisterScreen } from '../components/auth/RegisterScreen';
+import { startChecking } from '../actions/auth';
+import { PrivateRoute } from './PrivateRoute';
 import { ClientDashboard } from '../components/requests/ClientDashboard';
 import { ExecutiveDashboard } from '../components/requests/ExecutiveDashboard';
-import { startChecking } from '../actions/auth';
+import { PublicRoute } from './PublicRoute';
 
 export const AppRouter = () => {
 
@@ -19,41 +19,52 @@ export const AppRouter = () => {
 
     const {checking, uid, isClient} = useSelector(state => state.auth);
 
-    console.log(uid, isClient)
-
     useEffect(() => {
         dispatch( startChecking() );
     }, [dispatch])
 
     if ( checking ) {
-        return (<h1>Loading...</h1>);
+        return (
+        <>
+            <div className="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                <h3> Cargando... </h3>
+            </div>
+        </>
+        );
     }
 
     return (
         <Router>
             <div>
                 <Switch>
-                    <Route 
+                    <PublicRoute 
                         exact path="/" 
-                        component={ AppScreen } 
+                        component={ AppScreen }
+                        isAuthenticated={!!uid}
+                        isClient={isClient} 
                     />
-                    <Route 
+                    <PublicRoute 
                         exact path="/login" 
-                        component={ LoginScreen } 
+                        component={ LoginScreen }
+                        isAuthenticated={!!uid}
+                        isClient={isClient} 
                     />
-                    <Route 
+                    <PublicRoute 
                         exact path="/register" 
-                        component={ RegisterScreen } 
+                        component={ RegisterScreen }
+                        isAuthenticated={!!uid}
+                        isClient={isClient} 
                     />
-                    <Route 
+                    <PrivateRoute 
                         path="/client-dashboard" 
-                        component={ ClientDashboard } 
+                        component={ClientDashboard}
+                        isAuthenticated={!!uid && isClient}
                     />
-                    <Route 
+                    <PrivateRoute 
                         path="/executive-dashboard" 
-                        component={ ExecutiveDashboard } 
+                        component={ExecutiveDashboard}
+                        isAuthenticated={!!uid && !isClient}
                     />
-                    <Redirect to="/" />
                 </Switch>
             </div>
         </Router>

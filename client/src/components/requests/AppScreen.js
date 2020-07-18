@@ -3,13 +3,27 @@ import { Link } from 'react-router-dom';
 
 export const AppScreen = () => {
     return (
-        <div>
-            <h1> Pantalla principal (root) </h1>
+        <>
+            <div className="jumbotron min-vh-100 text-center table-dark bg-danger m-0 d-flex flex-column justify-content-center">
+                <h1 className="display-2"> <b> U-Assist </b></h1>
+                <p className="lead"> versión &beta; </p>
+                <div className="m-4 text-center">
 
-            <ul>
-                <li> <Link to="/login">Login</Link> </li>
-                <li> <Link to="/register">Registro</Link> </li>
-            </ul>
-        </div>
+                
+                    <Link to="/login">
+                        <button className="btn btn-info mr-5">
+                            Iniciar sesión
+                        </button>
+                    </Link> 
+                    <Link to="/register">
+                        <button className="btn btn-info">
+                            Registro
+                        </button>
+                    </Link>
+                </div>
+            </div>
+
+            
+        </>
     )
 }

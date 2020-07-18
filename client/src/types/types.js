@@ -7,6 +7,9 @@ export const types = {
     AUTH_LOGIN:             'Comienza el logueo del usuario (async)',
     AUTH_START_REGISTER:    'Comienza el registro de usuario',
     AUTH_START_TOKEN_RENEW: 'Comienza renovación de JWT',
-    AUTH_LOGOUT:            'Cierre de sesión de usuario'
+    AUTH_LOGOUT:            'Cierre de sesión de usuario',
+
+    REQUEST_CREATION:       'Registro de solicitud en BD',
+    REQUEST_FINISH_CREATION:'Proceso de ingreso finalizado'
 
 }

@@ -16,10 +16,12 @@ const RequestSchema = Schema({
     },
     codigo: {               // especie de ID del problema
         type: String,
+        default: "TROUBLE_ID",
         required: true
     },
     nombreCodigo: {         // el nombre del código. Ej: 200 = transferencias bancarias
         type: String,
+        default: "TROUBLE_ID_DESCRIPTION",
         required: true
     },
     descripcionProblema: {  // descripcion del problema. Ej: mi perro se cagó en la tarjeta, ayuda

@@ -21,8 +21,6 @@ router.get('/solicitudes', getRequestsExecutive);
 router.post('/', 
             [
                 check('categoria', 'La categoría es obligatoria').not().isEmpty(),
-                check('codigo', 'El código del problema es obligatorio').not().isEmpty(),
-                check('nombreCodigo', 'El nombre del código es obligatorio').not().isEmpty(),
                 check('descripcionProblema', 'Debe incluir una descripción del problema').not().isEmpty(),
                 validarCampos
             ], 
@@ -33,8 +31,6 @@ router.post('/',
 router.put('/:id',
             [
                 check('categoria', 'La categoría es obligatoria').not().isEmpty(),
-                check('codigo', 'El código del problema es obligatorio').not().isEmpty(),
-                check('nombreCodigo', 'El nombre del código es obligatorio').not().isEmpty(),
                 check('descripcionProblema', 'Debe incluir una descripción del problema').not().isEmpty(),
                 validarCampos
             ], 
