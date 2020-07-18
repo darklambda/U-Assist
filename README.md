@@ -8,5 +8,5 @@
 - [x] Registro desde front
 - [x] Logout desde front
 - [x] Merge con lo que hizo @endline999
-- [ ] Mostrar las soliciutdes del cliente en front
+- [x] Mostrar las soliciutdes del cliente en front
 - [ ] Mostrar solicitudes en dashboard de ejecutivo
