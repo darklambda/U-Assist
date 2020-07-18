@@ -17,15 +17,15 @@ export const AppRouter = () => {
 
     const dispatch = useDispatch();
 
-    const state = useSelector(state => state.auth);
+    const {checking, uid, isClient} = useSelector(state => state.auth);
 
-    console.log(state)
+    console.log(uid, isClient)
 
     useEffect(() => {
         dispatch( startChecking() );
     }, [dispatch])
 
-    if ( state.checking ) {
+    if ( checking ) {
         return (<h1>Loading...</h1>);
     }
 
@@ -33,11 +33,26 @@ export const AppRouter = () => {
         <Router>
             <div>
                 <Switch>
-                    <Route exact path="/" component={ AppScreen } />
-                    <Route exact path="/login" component={ LoginScreen } />
-                    <Route exact path="/register" component={ RegisterScreen } />
-                    <Route exact path="/client-dashboard" component={ ClientDashboard } />
-                    <Route exact path="/executive-dashboard" component={ ExecutiveDashboard } />
+                    <Route 
+                        exact path="/" 
+                        component={ AppScreen } 
+                    />
+                    <Route 
+                        exact path="/login" 
+                        component={ LoginScreen } 
+                    />
+                    <Route 
+                        exact path="/register" 
+                        component={ RegisterScreen } 
+                    />
+                    <Route 
+                        path="/client-dashboard" 
+                        component={ ClientDashboard } 
+                    />
+                    <Route 
+                        path="/executive-dashboard" 
+                        component={ ExecutiveDashboard } 
+                    />
                     <Redirect to="/" />
                 </Switch>
             </div>
