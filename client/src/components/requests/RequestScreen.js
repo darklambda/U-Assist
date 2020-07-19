@@ -1,7 +1,7 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
-import { createRequest } from '../../actions/request';
+import { createRequest, startgettingRequests, startUpdatingRequests} from '../../actions/request';
 import './request.css';
 import { uiCloseModal } from '../../actions/ui';
 
@@ -20,6 +20,7 @@ export const RequestScreen = () => {
         e.preventDefault();
         dispatch(createRequest(formValues));
         dispatch(uiCloseModal());
+        window.location.href = '/client-dashboard';
     }
 
     const categorias = ["Baja", "Media", "Alta"];
@@ -56,5 +57,52 @@ export const RequestScreen = () => {
                     </form>
                 </div>
             </div>
+    )
+}
+
+export const SelectRequest = () => {
+
+    const {requests} = useSelector(state => state.reqs) || [];
+    
+    const {uid} = useSelector(state => state.auth);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch( startgettingRequests() );
+    }, [dispatch])
+
+    let r = requests[requests.length - 1]
+
+    const handleSubmitForm = (e) => {
+        e.preventDefault()
+        const {categoria, descripcionProblema} = r.find(req => req.id === e.target.id);
+        const id = e.target.id;
+        dispatch(startUpdatingRequests({id, categoria, descripcionProblema, uid}))
+        dispatch(uiCloseModal());
+ 
+    }
+
+    return (
+        <>
+        <div className="m-4">
+            <h5>Haz doble click sobre la petición que quieres atender </h5>
+            <form onSubmit={handleSubmitForm} className="overflow-auto">
+                {   
+                    (requests.length > 0) 
+                    && r.map((i) => 
+
+                    <div id={i.id} className="card border-secondary mb-2" key={i.id} onDoubleClick={handleSubmitForm}>
+                        <div id={i.id} className="card-header">{i.categoria} - {i.estado}</div>
+                        <div id={i.id} className="card-body">
+                            <p id={i.id} className="card-text">{i.descripcionProblema}</p>
+                        </div>
+                    </div>
+                    ) 
+                }
+            </form>
+
+        </div>
+        </>
     )
 }

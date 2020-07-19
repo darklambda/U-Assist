@@ -1,5 +1,7 @@
 const { response } = require('express');
 const Request = require('../models/Request');
+const Executive = require('../models/Executive');
+const Client = require('../models/Client');
 
 const getRequestsClient = async(req, res=response) => {
 
@@ -50,7 +52,8 @@ const createRequest = async(req, res=response) => {
 const updateRequest = async(req, res=response) => {
 
     const requestID = req.params.id;
-    const uid = req.uid;
+    const Clientuid = await Client.findById(req.uid);
+    const Executiveuid = await Executive.findById(req.uid);
 
     try {
         
@@ -63,16 +66,28 @@ const updateRequest = async(req, res=response) => {
             });
         }
 
-        if ( request.client.toString() !== uid ) {
+        if ( request.client.toString() !== req.uid && !Executive) {
             return res.status(401).json({
                 ok: false,
                 msg: 'No tiene privilegios para editar esta solicitud'
             });
         }
 
-        const newRequest = {
-            ...req.body,
-            client: uid
+        if (!Executiveuid && !Clientuid) {
+            return res.status(404).json({
+                ok: false,
+                msg: "No existe un ejecutivo con el ID proporcionado"
+            });
+        }
+
+        let newRequest = {
+            ...req.body
+        } 
+
+        if (Clientuid) {
+            newRequest["client"] = req.uid;
+        } else {
+            newRequest["executive"] = req.uid;
         }
 
         const updatedRequest = await Request.findByIdAndUpdate(requestID, newRequest, {new: true});
@@ -129,10 +144,20 @@ const deleteRequest = async(req, res=response) => {
 
 }
 
+const getAvailableRequests = async(req, res=response) => {
+    const requests = await Request.find({executive: null})
+    return res.json({
+        ok: true,
+        requests
+    });
+
+}
+
 module.exports = {
     getRequestsClient,
     getRequestsExecutive,
     createRequest,
     updateRequest,
-    deleteRequest
+    deleteRequest,
+    getAvailableRequests
 }
