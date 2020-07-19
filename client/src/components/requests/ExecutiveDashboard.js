@@ -1,10 +1,10 @@
 import React from 'react'
-import { Navbar } from '../ui/Navbar'
+import { Navebar } from '../ui/Navebar'
 
 export const ExecutiveDashboard = () => {
     return (
         <div>
-            <Navbar />
+            <Navebar />
             <h1>Dashboard Ejecutivo</h1>
         </div>
     )

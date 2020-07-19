@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navbar } from '../ui/Navbar'
+import { Navebar } from '../ui/Navebar'
 import { NewRequestModal } from './NewRequestModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { uiOpenModal } from '../../actions/ui'
@@ -21,7 +21,7 @@ export const ClientDashboard = () => {
 
     return (
         <>
-        <Navbar />
+        <Navebar />
             <div className="m-4">
                 <h2>Dashboard cliente</h2>
             </div>
