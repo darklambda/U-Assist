@@ -1,6 +1,7 @@
 import { fetchConToken } from "../helpers/fetch"
 import { types } from '../types/types';
 import Swal from 'sweetalert2';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 export const createRequest = (event) => {
     return async(dispatch) => {
@@ -54,7 +55,6 @@ export const executiveRequestStartLoading = (event) => {
     }
 }
 
-
 export const startgettingRequests = (event) => {
     return async(dispatch) => {
         try {
@@ -86,6 +86,26 @@ export const startUpdatingRequests = (event) => {
             } else {
                 console.log(body.errors)
             }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
+export const signalingSV = (event) => {
+    return async(dispatch) => {
+        try {
+            const client = new W3CWebSocket('ws://localhost:4000');
+            client.onopen = () => {
+              var data = {"subject":"conAt", "id": "user1", "type": "client", "to": "user2"};
+              client.send(JSON.stringify(data)); 
+            };
+            client.onmessage = (message) => {
+              console.log(message);
+              console.log("he recibido un mensaje del servidor")
+            };
 
         } catch (error) {
             console.log(error);

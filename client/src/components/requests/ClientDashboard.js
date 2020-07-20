@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { uiOpenModal } from '../../actions/ui'
 import { requestStartLoading } from '../../actions/request'
 
+import { signalingSV } from '../../actions/request'
+
 export const ClientDashboard = () => {
 
     const {requests} = useSelector(state => state.reqs) || [];    
@@ -17,6 +19,10 @@ export const ClientDashboard = () => {
 
     const handleClick = () => {
         dispatch(uiOpenModal());
+    }
+
+    const handleClick2 = () => {
+        dispatch(signalingSV());
     }
 
     return (
@@ -54,6 +60,13 @@ export const ClientDashboard = () => {
                 }
                 </tbody>
             </table>
+            </div>
+
+            <div>
+                <h3> WebSocket </h3>
+                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
+                    <i className="fas fa-plus width-100"></i> CrearSocket  
+                </button>
             </div>
 
             <NewRequestModal />

@@ -34,19 +34,21 @@ const wss = new WebSocket.Server({ server }); //NEW  ws://localhost:4000
 //const wss = new WebSocket.Server({ server: app, path: "/WS" }); // NEW, quiza sea necesario crear directamente un sv http
 
 wss.on("connection", (ws, req) => {							
-  var connection = ws; 										
+  var connection = ws;										
   ws.on("message", data => {
-  	//data = JSON.parse(data); // Hay que probar si se pueden enviar jsons desde el front end
+  	data = JSON.parse(data);
+  	console.log(typeof data)
   	if (data.subject && data.id && data.type) { //Los mensajes deben tener el id de la bd del usuario y el tipo
   		var uId = data.id;
   		var type = data.type;
-  		if ( !(data.id in wsClient) && !(data.id in wsExecut)){ // Id no esta en ningun diccionario
-  			if (data.type == "client") {
-  				wsClient[data.id] = connection;
+  		if ( !(uId in wsClient) && !(uId in wsExecut)){ // Id no esta en ningun diccionario
+  			if (type == "client") {
+  				wsClient[uId] = connection;
   			} else {
-  				wsExecut[data.id] = connection;
+  				wsExecut[uId] = connection;
   			}
   		}
+  		console.log(2);
   		switch(data.subject) {
   			case "conAt": //Connect attempt, se debe buscar si el otro peer esta en la lista de conecciones
   			if (data.to){
@@ -56,6 +58,7 @@ wss.on("connection", (ws, req) => {
   				} else if (otherId in wsClient && type == "executive") {
   					wsClient[otherId].send(data.nec); // se envia a la otra conexion la data necesaria
   				} else { // El otro peer no esta conectado o hubo un error de conexiones
+  					console.log(3);
   					ws.send("wait"); // Se pide al peer esperar por su companhero
   				}		
   			}
@@ -64,8 +67,20 @@ wss.on("connection", (ws, req) => {
   	}				
   });
   ws.on("close", (code, reason) => {
-  	// Recorrer los diccionarios buscando el ws y eliminarlo
-  	console.log("Desconectada la coneccion con ws ", ws);
+  	var disc;
+  	for (var id in wsClient) {
+  		if (wsClient[id] == connection) {
+  			disc = id;
+  			delete wsClient[id];
+  		}
+  	}
+  	for (var id in wsExecut) {
+  		if (wsClient[id] == connection) {
+  			disc = id;
+  			delete wsClient[id];
+  		}
+  	}
+  	console.log("Desconectada la coneccion con ", disc);
   });													
 });
 
