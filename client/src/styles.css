@@ -34,8 +34,9 @@
     color: rgb(51, 51, 51);
     display: inline;
     max-height: 550px;
-    max-width: 500px;
+    max-width: 70vw;
     outline: none;
     padding: 30px;
     word-wrap: break-word;
+    overflow: auto;
 }

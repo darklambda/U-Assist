@@ -7,15 +7,21 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { getRequestsClient, getRequestsExecutive, createRequest, updateRequest, deleteRequest} = require('../controllers/requests');
+const { getRequestsClient, 
+        getRequestsExecutive, 
+        createRequest, 
+        updateRequest, 
+        deleteRequest, 
+        getAvailableRequests} = require('../controllers/requests');
 
 const router = Router();
 
 router.use(validarJWT);
 
-/* Obtener soliciutdes */
+/* Obtener solicitudes */
 router.get('/', getRequestsClient);
-router.get('/solicitudes', getRequestsExecutive);
+router.get('/executive-requests', getRequestsExecutive);
+router.get('/available-requests', getAvailableRequests);
 
 /* Crear solicitud */
 router.post('/', 

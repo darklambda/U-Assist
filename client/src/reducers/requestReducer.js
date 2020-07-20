@@ -2,7 +2,8 @@ import { types } from "../types/types";
 
 const initialState = {
 	requests: [],
-	activeRequest: null
+	activeRequest: [],
+	updatedRequest: []
 };
 
 export const requestReducer = (state=initialState, action ) => {
@@ -10,7 +11,7 @@ export const requestReducer = (state=initialState, action ) => {
 		case types.REQUEST_SET_ACTIVE:
 			return {
 				...state,
-				activeRequest: action.payload
+				activeRequest: [...state.requests, action.payload]
 			}
 		case types.REQUEST_CREATION:
 			return {
@@ -25,6 +26,14 @@ export const requestReducer = (state=initialState, action ) => {
 				...state,
 				requests: [
 					...state.requests,
+					action.payload
+				]
+			}
+		case types.REQUEST_UPDATED:
+			return {
+				...state,
+				updatedRequest: [
+					...state.updatedRequest,
 					action.payload
 				]
 			}	

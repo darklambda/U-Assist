@@ -12,6 +12,7 @@ export const types = {
     REQUEST_CREATION:           'Registro de solicitud en BD',
     REQUEST_SET_ACTIVE:         'Activar solicitud para hacer operaciones CRUD',
     REQUEST_LOADED:             'Obtener las request del usuario desde la BD',
+    REQUEST_UPDATED:            'Actualización de request',
 
     UI_OPEN_NEW_REQUEST_MODAL:  'Abrir modal nueva request',
     UI_CLOSE_NEW_REQUEST_MODAL: 'Cerrar modal nueva request'

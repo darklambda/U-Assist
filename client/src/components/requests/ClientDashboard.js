@@ -45,13 +45,11 @@ export const ClientDashboard = () => {
                 {   
                     (requests.length > 0) 
                     && requests[0].map((i) => 
-                        <>
-                        <tr >
-                        <th scope="row">{i.categoria}</th>
+                        <tr key={i.id}>
+                        <th >{i.categoria}</th>
                         <td >{i.estado}</td>
                         <td >{i.descripcionProblema}</td>
                         </tr>
-                        </>
                     ) 
                 }
                 </tbody>

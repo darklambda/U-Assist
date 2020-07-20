@@ -37,6 +37,63 @@ export const requestStartLoading = (event) => {
     }
 }
 
-const requestLoaded = (data) => ({type: types.REQUEST_LOADED, payload:data});
-const newRequest    = (data) => ({type: types.REQUEST_CREATION, payload: data});
-// const activeRequest = (data) => ({type: types.REQUEST_SET_ACTIVE, payload:data});
+export const executiveRequestStartLoading = (event) => {
+    return async(dispatch) => {
+        try {
+            const resp = await fetchConToken('requests/executive-requests', event);
+            const body = await resp.json();
+
+            if (body.ok) {
+                dispatch( requestLoaded(body.requests) );
+            } else {
+                Swal.fire('', body.errors.descripcionProblema.msg, 'error');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+
+export const startgettingRequests = (event) => {
+    return async(dispatch) => {
+        try {
+
+            const resp = await fetchConToken('requests/available-requests', event);
+            const body = await resp.json();
+
+            if (body.ok) {
+                dispatch( requestLoaded(body.requests) );
+            } else {
+                Swal.fire('', body.errors.descripcionProblema.msg, 'error');
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export const startUpdatingRequests = (event) => {
+    return async(dispatch) => {
+    
+        try {
+            const resp = await fetchConToken(`requests/${event.id}`, event, 'PUT');
+            const body = await resp.json();
+            
+            if (body.ok) {
+                dispatch(requestUpdated(event));
+            } else {
+                console.log(body.errors)
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
+const requestLoaded  = (data) => ({type: types.REQUEST_LOADED, payload:data});
+const newRequest     = (data) => ({type: types.REQUEST_CREATION, payload: data});
+const requestUpdated = (data) => ({type: types.REQUEST_UPDATED, payload: data});
