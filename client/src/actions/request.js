@@ -1,7 +1,6 @@
 import { fetchConToken } from "../helpers/fetch"
 import { types } from '../types/types';
 import Swal from 'sweetalert2';
-import { useSelector } from 'react-redux';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 export const createRequest = (event) => {
@@ -98,14 +97,13 @@ export const startUpdatingRequests = (event) => {
 export const signalingSV = (uid, isClient) => {
     return async(dispatch) => {
         try {
-            console.log(uid, isClient);
             const client = new W3CWebSocket('ws://localhost:4000');
             client.onopen = () => {
-              var data = {"subject":"conAt", "id": "user", "type": "client", "to": "user2"};
+              var data = {"subject":"conAt", "id": uid, "type": "client", "to": "user2"};
               client.send(JSON.stringify(data)); 
             };
             client.onmessage = (message) => {
-              if (message.data != "wait"){
+              if (message.data !== "wait"){
                 //do the magic with message.data.nec and create the rtc object
               }
               console.log(message);
@@ -119,18 +117,17 @@ export const signalingSV = (uid, isClient) => {
     }
 }
 
-export const signalingSV2 = (event) => {
+export const signalingSV2 = (uid, isClient) => {
     return async(dispatch) => {
         try {
-            //console.log(uid, isClient);
             const client = new W3CWebSocket('ws://localhost:4000');
             client.onopen = () => {
-              var data = {"subject":"conAt", "id": "user", "type": "executive", "to": "user2"};
+              var data = {"subject":"conAt", "id": uid, "type": "executive", "to": "user2"};
               client.send(JSON.stringify(data)); 
             };
             client.onmessage = (message) => {
               console.log(message);
-              if (message.data != "wait") {
+              if (message.data !== "wait") {
 
               }
               console.log("he recibido un mensaje del servidor")

@@ -63,7 +63,9 @@ wss.on("connection", (ws, req) => {
   			}
   			break;
 		}
-  	}				
+  	}
+    console.log(wsClient);
+    console.log(wsExecut);		
   });
   ws.on("close", (code, reason) => {
   	var disc;

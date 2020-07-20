@@ -9,7 +9,8 @@ import { signalingSV2 } from '../../actions/request';
 
 export const ExecutiveDashboard = () => {
 
-    const {requests} = useSelector(state => state.reqs) || [];    
+    const {requests} = useSelector(state => state.reqs) || [];
+    const {uid, isClient} = useSelector(state => state.auth) || [];   
 
     const dispatch = useDispatch();
 
@@ -22,7 +23,7 @@ export const ExecutiveDashboard = () => {
     }
 
     const handleClick2 = () => {
-        dispatch(signalingSV2());
+        dispatch(signalingSV2(uid, isClient));
     }
 
     return (
