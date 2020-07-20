@@ -38,10 +38,10 @@ export const Navebar = () => {
         className="d-inline-block align-top"
         alt="React Bootstrap logo"
       />
-    <Navbar.Brand href="#home">U-ASSIST</Navbar.Brand>
+    <Navbar.Brand href="/client-dashboard">U-ASSIST</Navbar.Brand>
     <Nav className="mr-auto">
-      <Nav.Link href="#home">Inicio</Nav.Link>
-      <Nav.Link href="#features">Mis Solicitudes</Nav.Link>
+      <Nav.Link href="/client-dashboard">Inicio</Nav.Link>
+      {/*<Nav.Link href="#features">Mis Solicitudes</Nav.Link>*/}
     </Nav>
     <Navbar.Collapse className="justify-content-end">
 
