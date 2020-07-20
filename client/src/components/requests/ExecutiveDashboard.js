@@ -4,6 +4,7 @@ import {SelectRequestModal} from './SelectRequestModal';
 import { uiOpenModal } from '../../actions/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { executiveRequestStartLoading } from '../../actions/request';
+import { signalingSV2 } from '../../actions/request';
 
 
 export const ExecutiveDashboard = () => {
@@ -18,6 +19,10 @@ export const ExecutiveDashboard = () => {
 
     const handleClick = () => {
         dispatch(uiOpenModal());
+    }
+
+    const handleClick2 = () => {
+        dispatch(signalingSV2());
     }
 
     return (
@@ -57,6 +62,12 @@ export const ExecutiveDashboard = () => {
             </table>
             </div>
 
+            <div>
+                <h3> WebSocket </h3>
+                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
+                    <i className="fas fa-plus width-100"></i> CrearSocket  
+                </button>
+            </div>
 
             <SelectRequestModal />
         </div>

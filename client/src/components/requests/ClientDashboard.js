@@ -9,7 +9,9 @@ import { signalingSV } from '../../actions/request'
 
 export const ClientDashboard = () => {
 
-    const {requests} = useSelector(state => state.reqs) || [];    
+    const {requests} = useSelector(state => state.reqs) || [];
+    const {uid, isClient} = useSelector(state => state.reqs) || [];
+    console.log(uid, isClient, "hola");
 
     const dispatch = useDispatch();
 
@@ -22,7 +24,7 @@ export const ClientDashboard = () => {
     }
 
     const handleClick2 = () => {
-        dispatch(signalingSV());
+        dispatch(signalingSV(uid, isClient));
     }
 
     return (

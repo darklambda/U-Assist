@@ -37,28 +37,27 @@ wss.on("connection", (ws, req) => {
   var connection = ws;										
   ws.on("message", data => {
   	data = JSON.parse(data);
-  	console.log(typeof data)
   	if (data.subject && data.id && data.type) { //Los mensajes deben tener el id de la bd del usuario y el tipo
   		var uId = data.id;
   		var type = data.type;
   		if ( !(uId in wsClient) && !(uId in wsExecut)){ // Id no esta en ningun diccionario
   			if (type == "client") {
-  				wsClient[uId] = connection;
+  				wsClient[uId] = {"con": connection, "nec": data.nec}; //con es la conexion websocket y nec la info para el rtc
   			} else {
-  				wsExecut[uId] = connection;
+  				wsExecut[uId] = {"con": connection, "nec": data.nec};
   			}
   		}
-  		console.log(2);
   		switch(data.subject) {
   			case "conAt": //Connect attempt, se debe buscar si el otro peer esta en la lista de conecciones
   			if (data.to){
   				otherId = data.to;
   				if (otherId in wsExecut && type == "client") {
-  					wsExecut[otherId].send(data.nec); // se envia a la otra conexion la data necesaria
+  					wsExecut[otherId].con.send(wsClient[uId].nec); // se envia a la otra conexion la data necesaria
+            connection.send(wsExecut[otherId].nec);
   				} else if (otherId in wsClient && type == "executive") {
-  					wsClient[otherId].send(data.nec); // se envia a la otra conexion la data necesaria
+  					wsClient[otherId].con.send(wsExecut[uId].nec); // se envia a la otra conexion la data necesaria
+            connection.send(wsClient[otherId].nec);
   				} else { // El otro peer no esta conectado o hubo un error de conexiones
-  					console.log(3);
   					ws.send("wait"); // Se pide al peer esperar por su companhero
   				}		
   			}
@@ -71,13 +70,13 @@ wss.on("connection", (ws, req) => {
   	for (var id in wsClient) {
   		if (wsClient[id] == connection) {
   			disc = id;
-  			delete wsClient[id];
+  			wsExecut.delete(id);
   		}
   	}
   	for (var id in wsExecut) {
   		if (wsClient[id] == connection) {
   			disc = id;
-  			delete wsClient[id];
+  			wsClient.delete(id);
   		}
   	}
   	console.log("Desconectada la coneccion con ", disc);
@@ -93,3 +92,5 @@ wss.on("connection", (ws, req) => {
 server.listen( process.env.PORT , () => {
     console.log(`>>> Server running in port ${ process.env.PORT }`);
 } );
+
+// data = {nec, subject, id, type, to}
