@@ -12,6 +12,7 @@ import { PrivateRoute } from './PrivateRoute';
 import { ClientDashboard } from '../components/requests/ClientDashboard';
 import { ExecutiveDashboard } from '../components/requests/ExecutiveDashboard';
 import { PublicRoute } from './PublicRoute';
+import { MeetingScreen } from '../components/requests/MeetingScreen';
 
 export const AppRouter = () => {
 
@@ -64,6 +65,11 @@ export const AppRouter = () => {
                         path="/executive-dashboard" 
                         component={ExecutiveDashboard}
                         isAuthenticated={!!uid && !isClient}
+                    />
+                    <PrivateRoute 
+                        path="/meet" 
+                        component={MeetingScreen}
+                        isAuthenticated={!!uid}
                     />
                 </Switch>
             </div>

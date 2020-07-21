@@ -4,6 +4,7 @@ import { NewRequestModal } from './NewRequestModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { uiOpenModal } from '../../actions/ui'
 import { requestStartLoading } from '../../actions/request'
+import { Link } from 'react-router-dom'
 
 import { signalingSV } from '../../actions/request'
 
@@ -38,6 +39,12 @@ export const ClientDashboard = () => {
                 <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick}> 
                     <i className="fas fa-plus width-100"></i> Agregar solicitud  
                 </button>
+                <Link to="/meet">
+                    <button className="btn btn-info mr-5">
+                        Iniciar reunión
+                    </button>
+                </Link>
+                     
             </div>
             <div className="m-4">
             <table className="table table-hover">
@@ -61,14 +68,18 @@ export const ClientDashboard = () => {
                 }
                 </tbody>
             </table>
-            </div>
+            <hr />
 
-            <div>
+            <div className="d-flex justify-content-between align-items-center">
                 <h3> WebSocket </h3>
                 <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
                     <i className="fas fa-plus width-100"></i> CrearSocket  
                 </button>
             </div>
+
+            </div>
+
+            
 
             <NewRequestModal />
         </>

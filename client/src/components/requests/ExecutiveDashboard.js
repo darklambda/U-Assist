@@ -61,13 +61,12 @@ export const ExecutiveDashboard = () => {
                 }
                 </tbody>
             </table>
-            </div>
-
-            <div>
+            <div className="d-flex justify-content-between align-items-center">
                 <h3> WebSocket </h3>
                 <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
                     <i className="fas fa-plus width-100"></i> CrearSocket  
                 </button>
+            </div>
             </div>
 
             <SelectRequestModal />

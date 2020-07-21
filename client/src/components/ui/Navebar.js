@@ -5,15 +5,15 @@ import { startLogout } from '../../actions/auth';
 import 'bootstrap/dist/css/bootstrap.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
 import Button from 'react-bootstrap/Button'
 
+// import NavDropdown from 'react-bootstrap/NavDropdown' si no se usará, borrar esta importacion
 
 
 export const Navebar = () => {
 
    
-    const {nombre, apellido} = useSelector(state => state.auth);
+    const {nombre} = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     const handleLogOut = () => {
@@ -30,7 +30,7 @@ export const Navebar = () => {
     
   </Navbar>
 
-  <Navbar bg="primary" variant="dark">
+  <Navbar bg="danger" variant="dark">
   <img
         src={logo}
         width="50"
