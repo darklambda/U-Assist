@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Navebar } from '../ui/Navebar'
 import {SelectRequestModal} from './SelectRequestModal';
 import { uiOpenModal } from '../../actions/ui';
@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { executiveRequestStartLoading } from '../../actions/request';
 import { signalingSV2 } from '../../actions/request';
 
+const configuration = {
+  iceServers: [{ url: "stun:stun.1.google.com:19302" }]
+};
 
 export const ExecutiveDashboard = () => {
 
@@ -14,16 +17,13 @@ export const ExecutiveDashboard = () => {
 
     const dispatch = useDispatch();
 
+
     useEffect(() => {
         dispatch( executiveRequestStartLoading() );
     }, [dispatch])
 
     const handleClick = () => {
         dispatch(uiOpenModal());
-    }
-
-    const handleClick2 = () => {
-        dispatch(signalingSV2(uid, isClient));
     }
 
     return (
@@ -63,7 +63,7 @@ export const ExecutiveDashboard = () => {
             </table>
             <div className="d-flex justify-content-between align-items-center">
                 <h3> WebSocket </h3>
-                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
+                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleLogin}> 
                     <i className="fas fa-plus width-100"></i> CrearSocket  
                 </button>
             </div>

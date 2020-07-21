@@ -3,6 +3,10 @@ import { types } from '../types/types';
 import Swal from 'sweetalert2';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
+const configuration = {
+      iceServers: [{ url: "stun:stun.1.google.com:19302" }]
+    };
+
 export const createRequest = (event) => {
     return async(dispatch) => {
         try {
@@ -94,20 +98,34 @@ export const startUpdatingRequests = (event) => {
     }
 }
 
-export const signalingSV = (uid, isClient) => {
+export const signalingSV = (uid, isClient, body) => {
     return async(dispatch) => {
         try {
+            let localConnection = new RTCPeerConnection(configuration);
             const client = new W3CWebSocket('ws://localhost:4000');
             client.onopen = () => {
-              var data = {"subject":"conAt", "id": uid, "type": "client", "to": "user2"};
-              client.send(JSON.stringify(data)); 
+              localConnection.createOffer().then(function(offer) {
+                    return localConnection.setLocalDescription(offer);
+                  })
+                  .then(function() {
+                    var sn = {"nec":localConnection.localDescription,
+                                "to": '5f0e524eb83222732017b36f',
+                                "subject": "conAt",
+                                "id": uid,
+                                "type": "client"};
+                    client.send(JSON.stringify(sn));
+                  })
+                  .catch();
             };
             client.onmessage = (message) => {
+              var data = JSON.parse(message.data);
+              console.log("recibi un msh :o");
+              console.log(data);
               if (message.data !== "wait"){
-                //do the magic with message.data.nec and create the rtc object
-              }
-              console.log(message);
-              console.log("he recibido un mensaje del servidor")
+                console.log("guess i'll die");
+              } else if (message.data.fin == "answer") {
+                console.log(localConnection.connectionState);
+              } 
             };
 
         } catch (error) {
@@ -120,15 +138,34 @@ export const signalingSV = (uid, isClient) => {
 export const signalingSV2 = (uid, isClient) => {
     return async(dispatch) => {
         try {
+            let localConnection2 = new RTCPeerConnection(configuration);
             const client = new W3CWebSocket('ws://localhost:4000');
             client.onopen = () => {
-              var data = {"subject":"conAt", "id": uid, "type": "executive", "to": "user2"};
+              var data = {"subject":"conAt", "id": uid, "type": "executive", "to": "idk"};
               client.send(JSON.stringify(data)); 
             };
             client.onmessage = (message) => {
               console.log(message);
               if (message.data !== "wait") {
 
+                var data = JSON.parse(message.data);
+                var sendTo = data.id;
+                console.log(data.nec);
+                var desc = new RTCSessionDescription(data.nec);
+                localConnection2.setRemoteDescription(desc);
+                var ans = localConnection2.createAnswer();
+                localConnection2.setLocalDescription(ans);
+                console.log("i made it here");
+                var sn = {"nec":localConnection2.localDescription,
+                                "to": sendTo,
+                                "subject": "conAt",
+                                "id": uid,
+                                "type": "executive", 
+                                "fin": "answer"};
+                    console.log(typeof sn);
+                    client.send(JSON.stringify(sn));
+                console.log(localConnection2.iceConnectionState, "wot");
+                
               }
               console.log("he recibido un mensaje del servidor")
             };

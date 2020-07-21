@@ -6,12 +6,10 @@ import { uiOpenModal } from '../../actions/ui'
 import { requestStartLoading } from '../../actions/request'
 import { Link } from 'react-router-dom'
 
-import { signalingSV } from '../../actions/request'
 
 export const ClientDashboard = () => {
 
     const {requests} = useSelector(state => state.reqs) || [];
-    const {uid, isClient} = useSelector(state => state.auth) || [];
 
     const dispatch = useDispatch();
 
@@ -21,10 +19,6 @@ export const ClientDashboard = () => {
 
     const handleClick = () => {
         dispatch(uiOpenModal());
-    }
-
-    const handleClick2 = () => {
-        dispatch(signalingSV(uid, isClient));
     }
 
     return (
@@ -70,17 +64,7 @@ export const ClientDashboard = () => {
             </table>
             <hr />
 
-            <div className="d-flex justify-content-between align-items-center">
-                <h3> WebSocket </h3>
-                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
-                    <i className="fas fa-plus width-100"></i> CrearSocket  
-                </button>
             </div>
-
-            </div>
-
-            
-
             <NewRequestModal />
         </>
     )
