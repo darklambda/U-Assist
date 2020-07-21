@@ -28,6 +28,11 @@ const RequestSchema = Schema({
         type: String,
         required: true
     },
+    solucionProblema: {
+        type: String,
+        default: "Sin solución (por el momento)",
+        required: true
+    },
     client: {
         type: Schema.Types.ObjectId,
         ref: 'Client',

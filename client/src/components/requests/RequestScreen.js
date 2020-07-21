@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
 import { createRequest, startgettingRequests, startUpdatingRequests} from '../../actions/request';
 import './request.css';
 import { uiCloseModal } from '../../actions/ui';
+import Checkbox from '@material-ui/core/Checkbox';
+
 
 export const RequestScreen = () => {
 
@@ -79,7 +81,8 @@ export const SelectRequest = () => {
         e.preventDefault()
         const {categoria, descripcionProblema} = r.find(req => req.id === e.target.id);
         const id = e.target.id;
-        dispatch(startUpdatingRequests({id, categoria, descripcionProblema, uid}))
+        const estado = "En proceso";
+        dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, uid}))
         dispatch(uiCloseModal());
  
     }
@@ -110,6 +113,19 @@ export const SelectRequest = () => {
 
 
 export const SolveRequest = () => {
+
+    
+    const [checked, setChecked] = useState(false);
+
+    const [formValues, handleInputChange] = useForm({
+        solucionProblema: ""
+    })
+
+      
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
+
     return (
         <>
         <div className="d-flex justify-content-between m-4 align-items-center">
@@ -119,6 +135,25 @@ export const SolveRequest = () => {
                     Iniciar reunión
                 </button>
             </Link>
+        </div>
+        <div className="d-flex justify-content-between m-4 align-items-center">
+            <h4>¿Problema solucionado?</h4>
+            <Checkbox
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
+        </div>
+        <div>
+            <h5 className="mt-4 mb-4">Solución del Problema<span>*</span></h5>
+                <textarea 
+                    rows="5"
+                    minLength="5"
+                    name="descripcionProblema"
+                    value= ""
+                    oncChange= { handleInputChange }
+                >
+                </textarea>
         </div>
         </>
     )
