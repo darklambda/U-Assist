@@ -114,6 +114,7 @@ export const SelectRequest = () => {
 
 export const SolveRequest = () => {
 
+    const dispatch = useDispatch();
     
     const [checked, setChecked] = useState(false);
 
@@ -121,10 +122,26 @@ export const SolveRequest = () => {
         solucionProblema: ""
     })
 
+    const {solucionProblema} = formValues;
       
     const handleChange = (event) => {
         setChecked(event.target.checked);
     };
+
+    const handleSubmitForm = (e) => {
+        if (checked){
+            
+            const id = e.target.id; // Deberia ser el ID de la solicitud para actualizarla, pero no funca
+            const estado = "Finalizado";
+
+            dispatch(startUpdatingRequests({id, estado, solucionProblema}))
+            dispatch(uiCloseModal());
+        } else {
+            e.preventDefault()
+        }
+
+
+    }
 
     return (
         <>
@@ -144,17 +161,27 @@ export const SolveRequest = () => {
                 inputProps={{ 'aria-label': 'primary checkbox' }}
             />
         </div>
-        <div>
-            <h5 className="mt-4 mb-4">Solución del Problema<span>*</span></h5>
-                <textarea 
-                    rows="5"
-                    minLength="5"
-                    name="descripcionProblema"
-                    value= ""
-                    oncChange= { handleInputChange }
-                >
-                </textarea>
-        </div>
+        <form onSubmit= { handleSubmitForm } >
+            <div>
+                <h5 className="mt-4 mb-4">Solución del Problema<span>*</span></h5>
+                    <textarea 
+                        rows="5"
+                        minLength="5"
+                        name="solucionProblema"
+                        value= {solucionProblema}
+                        onChange= { handleInputChange }
+                    >
+                    </textarea>
+                    
+            </div>
+            <div className="text-center">
+                <div className="form-group">
+                    <button type="submit" className="btnSubmit btn btn-primary"> Ingresar solicitud </button>
+                </div>
+            </div>
+        </form>
+        
+        
         </>
     )
 }
