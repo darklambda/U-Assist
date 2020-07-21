@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+
 import { Navebar } from '../ui/Navebar'
 import {SelectRequestModal} from './SelectRequestModal';
-import { uiOpenModal } from '../../actions/ui';
+import { uiOpenModal, uiOpenSolModal } from '../../actions/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { executiveRequestStartLoading } from '../../actions/request';
+import {SolveRequestModal} from '../requests/SolveRequestModal'
 import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
 
@@ -27,11 +28,16 @@ export const ExecutiveDashboard = () => {
         dispatch(uiOpenModal());
     }
 
+    const handleClickToSolve = () => {
+        dispatch(uiOpenSolModal());
+    }
+
      const cartasAlta = (categoria, id, descripcion ) => {
         if (categoria === "Alta"){
             return (<Card border="danger"
                      style={{ width: '18rem' }}
-                     className="mb-3">
+                     className="mb-3"
+                     onClick={handleClickToSolve}>
             <Card.Header>SOLICITUD {id}</Card.Header>
             <Card.Body>
             <Card.Title>{categoria}</Card.Title>
@@ -42,7 +48,7 @@ export const ExecutiveDashboard = () => {
 
      const cartasMedia = (categoria, id, descripcion) => {
         if (categoria === "Media"){
-            return (<Card border="warning" style={{ width: '18rem' }}>
+            return (<Card border="warning" style={{ width: '18rem' }} onClick={handleClickToSolve}>
             <Card.Header>SOLICITUD {id}</Card.Header>
             <Card.Body>
             <Card.Title>{categoria}</Card.Title>
@@ -53,7 +59,7 @@ export const ExecutiveDashboard = () => {
 
      const cartasBaja = (categoria, id, descripcion) => {
         if (categoria === "Baja"){
-            return (<Card border="info" style={{ width: '18rem' }}>
+            return (<Card border="info" style={{ width: '18rem' }} onClick={handleClickToSolve}>
             <Card.Header>SOLICITUD {id}</Card.Header>
             <Card.Body>
             <Card.Title>{categoria}</Card.Title>
@@ -74,21 +80,16 @@ export const ExecutiveDashboard = () => {
                 <button className="btn btn-sm btn-outline-primary h-50 w-25" onClick={handleClick}> 
                     <i className="fas fa-feather-alt"></i> Seleccionar solicitud  
                 </button>
-                <Link to="/meet-executive">
-                    <button className="btn btn-info mr-5">
-                        Iniciar reunión
-                    </button>
-                </Link>
             </div>
 
             <div className="m-3">
                 <CardDeck>
                 {  
                     (requests.length > 0) 
-                    && requests[0].map((i) => 
-                        <tr key={i.id}>
+                    && requests[0].map((i) =>
+                        <div key={i.id}> 
                         {cartasAlta(i.categoria,i.id,i.descripcionProblema)}
-                        </tr>
+                        </div>
                     )            
                 }
                 </CardDeck>
@@ -97,9 +98,9 @@ export const ExecutiveDashboard = () => {
                 {  
                     (requests.length > 0) 
                     && requests[0].map((i) => 
-                        <tr key={i.id}>
+                        <div key={i.id}>
                         {cartasMedia(i.categoria,i.id,i.descripcionProblema)}
-                        </tr>
+                        </div>
                     )            
                 }
                 </CardDeck>
@@ -108,9 +109,9 @@ export const ExecutiveDashboard = () => {
                 {  
                     (requests.length > 0) 
                     && requests[0].map((i) => 
-                        <tr key={i.id}>
+                        <div key={i.id}>
                         {cartasBaja(i.categoria,i.id,i.descripcionProblema)} 
-                        </tr>
+                        </div>
                     )            
                 }
                 </CardDeck>
@@ -124,6 +125,7 @@ export const ExecutiveDashboard = () => {
             </div>
 
             <SelectRequestModal />
+            <SolveRequestModal />
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
 import { createRequest, startgettingRequests, startUpdatingRequests} from '../../actions/request';
@@ -102,6 +103,22 @@ export const SelectRequest = () => {
                 }
             </form>
 
+        </div>
+        </>
+    )
+}
+
+
+export const SolveRequest = () => {
+    return (
+        <>
+        <div className="d-flex justify-content-between m-4 align-items-center">
+            <h3>Solucionar solicitud</h3>
+            <Link to="/meet-executive">
+                <button className="btn btn-info mr-5">
+                    Iniciar reunión
+                </button>
+            </Link>
         </div>
         </>
     )

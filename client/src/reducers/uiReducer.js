@@ -1,7 +1,8 @@
 import { types } from "../types/types";
 
 const initialState =  {
-	isOpen: false
+	isOpen: false,
+	isSolOpen: false
 }
 
 export const uiReducer = ( state=initialState, action) => {
@@ -16,6 +17,16 @@ export const uiReducer = ( state=initialState, action) => {
 			return {
 				...state,
 				isOpen: false
+			}
+		case types.UI_OPEN_REQUEST_MODAL:
+			return {
+				...state,
+				isSolOpen: true
+			}
+		case types.UI_CLOSE_REQUEST_MODAL:
+			return {
+				...state,
+				isSolOpen: false
 			}
 		default:
 			return state;

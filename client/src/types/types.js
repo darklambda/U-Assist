@@ -15,6 +15,9 @@ export const types = {
     REQUEST_UPDATED:            'Actualización de request',
 
     UI_OPEN_NEW_REQUEST_MODAL:  'Abrir modal nueva request',
-    UI_CLOSE_NEW_REQUEST_MODAL: 'Cerrar modal nueva request'
+    UI_CLOSE_NEW_REQUEST_MODAL: 'Cerrar modal nueva request',
+
+    UI_OPEN_REQUEST_MODAL:  'Abrir modal request',
+    UI_CLOSE_REQUEST_MODAL: 'Cerrar modal request'
 
 }
