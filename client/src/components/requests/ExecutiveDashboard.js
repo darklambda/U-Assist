@@ -1,17 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Navebar } from '../ui/Navebar'
 import {SelectRequestModal} from './SelectRequestModal';
 import { uiOpenModal } from '../../actions/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { executiveRequestStartLoading } from '../../actions/request';
-import { signalingSV2 } from '../../actions/request';
 import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
+
+// import { signalingSV2 } from '../../actions/request';
 
 export const ExecutiveDashboard = () => {
 
     const {requests} = useSelector(state => state.reqs) || [];
-    const {uid, isClient} = useSelector(state => state.auth) || [];   
+    
+    // const {uid, isClient} = useSelector(state => state.auth);   
 
     const dispatch = useDispatch();
 
@@ -23,17 +26,21 @@ export const ExecutiveDashboard = () => {
     const handleClick = () => {
         dispatch(uiOpenModal());
     }
-    function mostrarCartas(categoria,id,descripcion) {
+
+     const cartasAlta = (categoria, id, descripcion ) => {
         if (categoria === "Alta"){
-               return (<Card border="danger"
-                        style={{ width: '18rem' }}
-                        className="mb-3">
-               <Card.Header>SOLICITUD {id}</Card.Header>
-               <Card.Body>
-               <Card.Title>{categoria}</Card.Title>
-               <Card.Text>{descripcion}</Card.Text>
-                  </Card.Body> 
-               </Card>);}
+            return (<Card border="danger"
+                     style={{ width: '18rem' }}
+                     className="mb-3">
+            <Card.Header>SOLICITUD {id}</Card.Header>
+            <Card.Body>
+            <Card.Title>{categoria}</Card.Title>
+            <Card.Text>{descripcion}</Card.Text>
+               </Card.Body> 
+            </Card>);}
+     }
+
+     const cartasMedia = (categoria, id, descripcion) => {
         if (categoria === "Media"){
             return (<Card border="warning" style={{ width: '18rem' }}>
             <Card.Header>SOLICITUD {id}</Card.Header>
@@ -42,6 +49,9 @@ export const ExecutiveDashboard = () => {
             <Card.Text>{descripcion}</Card.Text>
                </Card.Body> 
             </Card>);}
+     }
+
+     const cartasBaja = (categoria, id, descripcion) => {
         if (categoria === "Baja"){
             return (<Card border="info" style={{ width: '18rem' }}>
             <Card.Header>SOLICITUD {id}</Card.Header>
@@ -50,7 +60,6 @@ export const ExecutiveDashboard = () => {
             <Card.Text>{descripcion}</Card.Text>
                </Card.Body> 
             </Card>);}
-            
      }
 
     return (
@@ -65,70 +74,54 @@ export const ExecutiveDashboard = () => {
                 <button className="btn btn-sm btn-outline-primary h-50 w-25" onClick={handleClick}> 
                     <i className="fas fa-feather-alt"></i> Seleccionar solicitud  
                 </button>
+                <Link to="/meet-executive">
+                    <button className="btn btn-info mr-5">
+                        Iniciar reunión
+                    </button>
+                </Link>
             </div>
 
-            <div className="m-4">
-            <CardDeck>
-            {  
-           
+            <div className="m-3">
+                <CardDeck>
+                {  
                     (requests.length > 0) 
                     && requests[0].map((i) => 
                         <tr key={i.id}>
-                       {mostrarCartas(i.categoria,i.id,i.descripcionProblema)}    
-    
+                        {cartasAlta(i.categoria,i.id,i.descripcionProblema)}
                         </tr>
-                        
-                         ) 
-                    
-                  }
-                 </CardDeck>
-                 
-                 
-                 <div className="d-flex justify-content-between align-items-center">
-                <h3> WebSocket </h3>
-                <button className="btn btn-sm btn-outline-primary h-50" > 
-                    <i className="fas fa-plus width-100"></i> CrearSocket  
-                </button>
-            </div>
-                 
-                 
-                 
-                 </div>
-
-
-
-           {/*  <div className="m-4">
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                    <th scope="col">Nivel de Urgencia</th>
-                    <th scope="col">Estado de solicitud</th>
-                    <th scope="col">Detalles del problema</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {   
-                    (requests.length > 0) 
-                    && requests[0].map((i) => 
-                        <tr key={i.id}>
-                        <th >{i.categoria}</th>
-                        <td >{i.estado}</td>
-                        <td >{i.descripcionProblema}</td>
-                        </tr>
-                    ) 
+                    )            
                 }
-                </tbody>
-            </table>
-            <div className="d-flex justify-content-between align-items-center">
-                <h3> WebSocket </h3>
-                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleLogin}> 
-                    <i className="fas fa-plus width-100"></i> CrearSocket  
-                </button>
+                </CardDeck>
+                <hr />
+                <CardDeck>
+                {  
+                    (requests.length > 0) 
+                    && requests[0].map((i) => 
+                        <tr key={i.id}>
+                        {cartasMedia(i.categoria,i.id,i.descripcionProblema)}
+                        </tr>
+                    )            
+                }
+                </CardDeck>
+                <hr />
+                <CardDeck>
+                {  
+                    (requests.length > 0) 
+                    && requests[0].map((i) => 
+                        <tr key={i.id}>
+                        {cartasBaja(i.categoria,i.id,i.descripcionProblema)} 
+                        </tr>
+                    )            
+                }
+                </CardDeck>
+                <hr /> 
+                <div className="d-flex justify-content-between align-items-center">
+                    <h3> WebSocket </h3>
+                    <button className="btn btn-sm btn-outline-primary h-50" > 
+                        <i className="fas fa-plus width-100"></i> CrearSocket  
+                    </button>
+                </div>     
             </div>
-            </div>
-             */}       
-            
-             
 
             <SelectRequestModal />
         </div>

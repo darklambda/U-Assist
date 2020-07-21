@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { signalingSV } from '../../actions/request'
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
+
+// import { useDispatch, useSelector } from 'react-redux'
+// import { signalingSV } from '../../actions/request'
 
 const Container = styled.div`
   height: 100vh;
@@ -37,9 +38,9 @@ export const MeetingScreen = () => {
     const partnerVideo = useRef();
     const socket = useRef();
 
-	const {uid, isClient} = useSelector(state => state.auth) || [];
+	// const {uid, isClient} = useSelector(state => state.auth) || [];
 
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 
 	  useEffect(() => {
 	 console.log("1");

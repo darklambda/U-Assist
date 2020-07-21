@@ -17,7 +17,7 @@
 ## WebRTC
   *Front End
   
-- [ ] En la vista del cliente, crear un canvas (tipo video html) con un stream del la pestaña que se escoga
+- [x] En la vista del cliente, crear un canvas (tipo video html) con un stream del la pestaña que se escoga
 - [ ] En la vista del ejecutivo, crear un objetivo video en html para poder recibir el stream.
 - [ ] En controladores de ambas vistas crear un objeto RTCPeerConnection sobre el respectivo usuario.
     Usar como configuración el siguiente stunSV = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}] (gratis de google)

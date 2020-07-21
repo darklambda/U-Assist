@@ -123,7 +123,7 @@ export const signalingSV = (uid, isClient, body) => {
               console.log(data);
               if (message.data !== "wait"){
                 console.log("guess i'll die");
-              } else if (message.data.fin == "answer") {
+              } else if (message.data.fin === "answer") {
                 console.log(localConnection.connectionState);
               } 
             };
