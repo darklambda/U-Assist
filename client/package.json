@@ -21,6 +21,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "simple-peer": "^9.7.2",
+    "socket.io-client": "^2.3.0",
+    "styled-components": "^5.1.1",
     "sweetalert2": "^9.17.0",
     "typescript": "^3.9.7",
     "websocket": "^1.0.31"

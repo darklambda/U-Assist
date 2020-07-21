@@ -6,9 +6,6 @@ const WebSocket = require("ws"); //NEW
 
 const { dbConnection } = require('./database/config');
 
-let users = {};
-
-
 /* Crear el servidor de express */
 const app = express();
 
@@ -46,6 +43,7 @@ io.on('connection', socket => {
     })
 
     socket.on("callUser", (data) => {
+        console.log("???");
         io.to(data.userToCall).emit('hey', {signal: data.signalData, from: data.from});
     })
 
