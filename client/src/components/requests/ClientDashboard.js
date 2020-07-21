@@ -5,11 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { uiOpenModal } from '../../actions/ui'
 import { requestStartLoading } from '../../actions/request'
 import { Link } from 'react-router-dom'
-
+import Card from 'react-bootstrap/Card'
+import CardDeck from 'react-bootstrap/CardDeck'
+import { signalingSV } from '../../actions/request'
 
 export const ClientDashboard = () => {
 
     const {requests} = useSelector(state => state.reqs) || [];
+    
+    const {uid, isClient} = useSelector(state => state.auth) || [];
 
     const dispatch = useDispatch();
 
@@ -19,6 +23,42 @@ export const ClientDashboard = () => {
 
     const handleClick = () => {
         dispatch(uiOpenModal());
+    }
+
+     function mostrarCartas(categoria,id,descripcion) {
+        if (categoria === "Alta"){
+               return (<Card border="danger"
+                        style={{ width: '18rem' }}
+                        className="mb-3">
+               <Card.Header>SOLICITUD {id}</Card.Header>
+               <Card.Body>
+               <Card.Title>{categoria}</Card.Title>
+               <Card.Text>{descripcion}</Card.Text>
+                  </Card.Body> 
+               </Card>);}
+        if (categoria === "Media"){
+            return (<Card border="warning" style={{ width: '18rem' }}>
+            <Card.Header>SOLICITUD {id}</Card.Header>
+            <Card.Body>
+            <Card.Title>{categoria}</Card.Title>
+            <Card.Text>{descripcion}</Card.Text>
+               </Card.Body> 
+            </Card>);}
+        if (categoria === "Baja"){
+            return (<Card border="info" style={{ width: '18rem' }}>
+            <Card.Header>SOLICITUD {id}</Card.Header>
+            <Card.Body>
+            <Card.Title>{categoria}</Card.Title>
+            <Card.Text>{descripcion}</Card.Text>
+               </Card.Body> 
+            </Card>);}
+            
+     }
+        
+     
+
+    const handleClick2 = () => {
+        dispatch(signalingSV(uid, isClient));
     }
 
     return (
@@ -41,6 +81,34 @@ export const ClientDashboard = () => {
                      
             </div>
             <div className="m-4">
+            <CardDeck>
+            {  
+           
+                    (requests.length > 0) 
+                    && requests[0].map((i) => 
+                        <tr key={i.id}>
+                       {mostrarCartas(i.categoria,i.id,i.descripcionProblema)}    
+    
+                        </tr>
+                        
+                         ) 
+                    
+                  }
+                 </CardDeck>
+
+
+                 <div className="d-flex justify-content-between align-items-center">
+                <h3> WebSocket </h3>
+                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick2}> 
+                    <i className="fas fa-plus width-100"></i> CrearSocket  
+                </button>
+            </div>
+
+            
+                 </div>
+
+{/*
+            <div className="m-4">
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -49,6 +117,10 @@ export const ClientDashboard = () => {
                     <th scope="col">Detalles del problema</th>
                     </tr>
                 </thead>
+               
+               
+               
+               
                 <tbody>
                 {   
                     (requests.length > 0) 
@@ -60,11 +132,11 @@ export const ClientDashboard = () => {
                         </tr>
                     ) 
                 }
-                </tbody>
+            </tbody>
             </table>
-            <hr />
-
+            <hr />    
             </div>
+*/}
             <NewRequestModal />
         </>
     )
