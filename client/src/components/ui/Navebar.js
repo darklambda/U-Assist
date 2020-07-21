@@ -2,12 +2,11 @@ import React from 'react';
 import logo from './logo_u-assist.jpg';
 import { useSelector, useDispatch } from 'react-redux';
 import { startLogout } from '../../actions/auth';
-import 'bootstrap/dist/css/bootstrap.css';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 
-// import NavDropdown from 'react-bootstrap/NavDropdown' si no se usará, borrar esta importacion
 
 
 export const Navebar = () => {
@@ -30,7 +29,7 @@ export const Navebar = () => {
     
   </Navbar>
 
-  <Navbar bg="danger" variant="dark">
+  <Navbar bg="primary" variant="dark">
   <img
         src={logo}
         width="50"
