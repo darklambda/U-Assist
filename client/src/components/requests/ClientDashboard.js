@@ -79,10 +79,9 @@ export const ClientDashboard = () => {
            
                     (requests.length > 0) 
                     && requests[0].map((i) => 
-                        <tr key={i.id}>
+                        <div key={i.id}>
                        {mostrarCartas(i.categoria,i.id,i.descripcionProblema)}    
-    
-                        </tr>
+                        </div>
                         
                          ) 
                     

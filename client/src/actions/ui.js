@@ -8,8 +8,9 @@ export const uiCloseModal = () => ({
 	type: types.UI_CLOSE_NEW_REQUEST_MODAL
 });
 
-export const uiOpenSolModal = () => ({
-	type: types.UI_OPEN_REQUEST_MODAL
+export const uiOpenSolModal = (data) => ({
+	type: types.UI_OPEN_REQUEST_MODAL,
+	payload: data
 });
 
 export const uiCloseSolModal = () => ({

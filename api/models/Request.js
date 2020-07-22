@@ -30,7 +30,7 @@ const RequestSchema = Schema({
     },
     solucionProblema: {
         type: String,
-        default: "Sin solución (por el momento)",
+        default: "PENDIENTE",
         required: true
     },
     client: {

@@ -112,7 +112,9 @@ export const SelectRequest = () => {
 }
 
 
-export const SolveRequest = () => {
+export const SolveRequest = (request) => {
+
+    const {id, descripcionProblema, categoria} = request;
 
     const dispatch = useDispatch();
     
@@ -129,15 +131,13 @@ export const SolveRequest = () => {
     };
 
     const handleSubmitForm = (e) => {
+        e.preventDefault()
         if (checked){
-            
-            const id = e.target.id; // Deberia ser el ID de la solicitud para actualizarla, pero no funca
-            const estado = "Finalizado";
+            // const id = e.target.id;  Deberia ser el ID de la solicitud para actualizarla, pero no funca
+            const estado = "Solucionada";
 
-            dispatch(startUpdatingRequests({id, estado, solucionProblema}))
+            dispatch(startUpdatingRequests({id, descripcionProblema, categoria, estado, solucionProblema}))
             dispatch(uiCloseModal());
-        } else {
-            e.preventDefault()
         }
 
 
@@ -176,7 +176,7 @@ export const SolveRequest = () => {
             </div>
             <div className="text-center">
                 <div className="form-group">
-                    <button type="submit" className="btnSubmit btn btn-primary"> Ingresar solicitud </button>
+                    <button type="submit" className="btnSubmit btn btn-danger col-4"> Solucionar solicitud </button>
                 </div>
             </div>
         </form>

@@ -19,7 +19,7 @@ Modal.setAppElement('#root')
 
 export const SolveRequestModal = () => {
 
-	const {isSolOpen} = useSelector(state => state.ui)
+	const {isSolOpen, solRequest} = useSelector(state => state.ui)
 	const dispatch = useDispatch();
 
 	const closeModal = () => {
@@ -35,7 +35,7 @@ export const SolveRequestModal = () => {
 			overlayClassName="modal-fondo"
 			closeTimeoutMS={200}
 		>
-			<SolveRequest />
+			<SolveRequest request={solRequest}/>
 
 		</Modal>
 		)
