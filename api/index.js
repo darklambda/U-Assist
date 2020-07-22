@@ -48,6 +48,8 @@ io.on('connection', socket => {
     io.sockets.emit("allUsers", users);
     socket.on('disconnect', () => {
         delete users[socket.id];
+        console.log("someone disconected");
+        io.sockets.emit("allUsers", users);
     })
 
     socket.on("callUser", (data) => {

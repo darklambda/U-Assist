@@ -24,8 +24,7 @@ const Video = styled.video`
 `;
 
 export const MeetingExScreen = () => {
-
-    /*Aqui está la request completa, con todos los datos del ejecutivo y del cliente 
+  /*
     request = {
       categoria,
       client: { apellido, email, nombre, rut, telefono, id},
@@ -62,6 +61,7 @@ export const MeetingExScreen = () => {
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
+      console.log(users);
       setUsers(users);
     })
 
@@ -117,12 +117,39 @@ export const MeetingExScreen = () => {
     );
   }
 
-  	let incomingCall;
+let callbutton;   
+  if (!callAccepted && !receivingCall) {
+    callbutton = (
+      <div>
+        {Object.keys(users).map(key => {
+          console.log(users[key].type, typeof request.client._id, typeof request.client._id)
+          if (users[key].id === request.client._id) {
+            return (
+            <button onClick={() => callPeer(key)}>El cliente esta online</button>
+          );
+          }
+        })}     
+    </div>
+    )
+  }
+
+   let infoAndHung;
+  if (callAccepted) {
+    infoAndHung = (
+      <div>
+        <h3>Informacion sobre la llamada</h3>
+        <p>Hablando con {request.client.nombre} {request.client.apellido} de rut {request.client.rut} sobre la solicud ticket {request._id} con la siguiente descripcion: 
+        {request.descripcionProblema}</p>
+      </div>
+    )
+  }
+
+      let incomingCall;
   if (receivingCall) {
     incomingCall = (
       <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
+        <h1>El cliente de la solicitud quiere comenzar la llamada</h1>
+        <button  onClick={acceptCall}>Aceptar llamada</button>
       </div>
     )
   }
@@ -137,14 +164,10 @@ export const MeetingExScreen = () => {
         {PartnerVideo}
       </Row>
       <Row>
-        {Object.keys(users).map(key => {
-          if (users[key].type === "client") {
-            return (
-            <button onClick={() => callPeer(key)}>Llamar cliente {users[key].id}</button>
-          );
-          }
-          return null
-        })}
+      {callbutton}
+      </Row>
+      <Row>
+        {infoAndHung}
       </Row>
       <Row>
         {incomingCall}

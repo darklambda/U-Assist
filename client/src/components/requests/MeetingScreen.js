@@ -41,6 +41,8 @@ export const MeetingScreen = () => {
     const partnerVideo = useRef();
     const socket = useRef();
 
+    const request = {ejecutivo: {id: "123"}, descripcion:"poggers", id:"1233"} //useLocation().state;
+
 	// const {uid, isClient} = useSelector(state => state.auth) || [];
 
 	// const dispatch = useDispatch();
@@ -158,8 +160,33 @@ function acceptCall() {
   if (receivingCall) {
     incomingCall = (
       <div>
-        <h4>{caller} is calling you</h4>
-        <button onClick={acceptCall}>Accept</button>
+        <h4>El ejecutivo esta pidiendo comenzar la llamada</h4>
+        <button onClick={acceptCall}>Aceptar</button>
+      </div>
+    )
+  }
+
+  let callbutton;   
+  if (!callAccepted && !receivingCall) {
+    callbutton = (
+      <div>
+        {Object.keys(users).map(key => {
+          if (users[key].type === "executive") { //CAMBIAR
+            return (
+            <button onClick={() => callPeer(key)}>Llamar</button>
+          );
+          }
+        })}     
+    </div>
+    )
+  }
+
+   let infoAndHung;
+  if (callAccepted) {
+    infoAndHung = (
+      <div>
+        <h3>Informacion sobre la llamada</h3>
+        <p>Hablando con ejecutivo de identificador id {request.ejecutivo.id}, sobre la solicitud de id {request.id} con descripcion: {request.descripcion}</p>
       </div>
     )
   }
@@ -173,14 +200,10 @@ function acceptCall() {
         {UserVideo}
       </Row>
       <Row>
-        {Object.keys(users).map(key => {
-          if (users[key].type === "executive") {
-            return (
-            <button onClick={() => callPeer(key)}>Llamar ejecutivo {users[key].id}</button>
-          );
-          }
-          return null
-        })}
+      {callbutton}
+      </Row>
+      <Row>
+        {infoAndHung}
       </Row>
       <Row>
         {incomingCall}
