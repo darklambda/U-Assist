@@ -112,9 +112,7 @@ export const SelectRequest = () => {
 }
 
 
-export const SolveRequest = (request) => {
-
-    const {id, descripcionProblema, categoria} = request;
+export const SolveRequest = (request) => {  
 
     const dispatch = useDispatch();
     
@@ -133,14 +131,22 @@ export const SolveRequest = (request) => {
     const handleSubmitForm = (e) => {
         e.preventDefault()
         if (checked){
-            // const id = e.target.id;  Deberia ser el ID de la solicitud para actualizarla, pero no funca
+
             const estado = "Solucionada";
+            
+            try {
+                
+                const id = request.request.id;
+                const descripcionProblema = request.request.descripcion;
+                const categoria = request.request.categoria;
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema}))
+                dispatch(uiCloseModal());
 
-            dispatch(startUpdatingRequests({id, descripcionProblema, categoria, estado, solucionProblema}))
-            dispatch(uiCloseModal());
+            } catch (error) {
+                console.log("Detallito");
+            }  
+            
         }
-
-
     }
 
     return (
