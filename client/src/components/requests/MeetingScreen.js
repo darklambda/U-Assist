@@ -46,7 +46,6 @@ export const MeetingScreen = () => {
 	// const dispatch = useDispatch();
 
 	useEffect(() => {
-		console.log("1");
     	socket.current = io.connect("ws://localhost:4000");
     	navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
     	setStream(stream);
@@ -93,8 +92,8 @@ export const MeetingScreen = () => {
     });
 
     peer.on("signal", data => {
-    	console.log("signal");
-      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID })
+    	console.log(data, "signal");
+      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID, bo: "no" })
     })
 
     peer.on("stream", stream => {
@@ -110,7 +109,6 @@ export const MeetingScreen = () => {
   }
 
 function offerCall(id){
-  console.log("helo");
 	setReceivingCall(true);
     setCaller(id);
 }
@@ -124,8 +122,8 @@ function acceptCall() {
       stream: stream,
     });
     peer.on("signal", data => {
-      console.log("signal");
-      socket.current.emit("callUser", { userToCall: caller, signalData: data, from: yourID })
+      console.log(data, "signal");
+      socket.current.emit("callUser", { userToCall: caller, signalData: data, from: yourID, bo:"hi" })
     })
 
     peer.on("stream", stream => {

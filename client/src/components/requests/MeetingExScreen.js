@@ -46,7 +46,6 @@ export const MeetingExScreen = () => {
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
-  const [coming, setComing] = useState(false);
 
     const {uid} = useSelector(state => state.auth) || [];
 
@@ -67,11 +66,10 @@ export const MeetingExScreen = () => {
     })
 
     socket.current.on("hey", (data) => {
-      console.log(coming);
-      if (coming) {
+      if (data.bo === "hi") {
+        setReceivingCall(true);
         setCaller(data.from);
-        setCallerSignal(data.signal)
-;        acceptCall()
+        setCallerSignal(data.signal);    
       } else {
         setReceivingCall(true);
         setCaller(data.from);
@@ -81,7 +79,6 @@ export const MeetingExScreen = () => {
   	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
   function callPeer(to) {
-    setComing(true);
     socket.current.emit("askPeer", {to: to, signal: yourID});
   }
 
