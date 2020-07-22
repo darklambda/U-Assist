@@ -57,6 +57,16 @@ io.on('connection', socket => {
     socket.on("acceptCall", (data) => {
         io.to(data.to).emit('callAccepted', data.signal);
     })
+    socket.on("askPeer", (data) => {
+        console.log("got this")
+        io.to(data.to).emit('askPeer', {peer: data.signal});
+    })
+    socket.on("hungUp", (data) => {
+        io.to(data.to).emit('hungUp', data.signal);
+    })
+    socket.on("hungUpBack", (data) => {
+        io.to(data.to).emit('hungUpBack', data.signal);
+    })
 });
 
 

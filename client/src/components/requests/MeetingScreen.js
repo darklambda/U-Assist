@@ -64,11 +64,10 @@ export const MeetingScreen = () => {
       setUsers(users);
     })
 
-    socket.current.on("hey", (data) => {
-      setReceivingCall(true);
-      setCaller(data.from);
-      setCallerSignal(data.signal);
+    socket.current.on("askPeer", (to) => {
+      offerCall(to.peer);
     })
+
   }, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
     function callPeer(id) {
@@ -94,35 +93,57 @@ export const MeetingScreen = () => {
     });
 
     peer.on("signal", data => {
+    	console.log("signal");
       socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID })
     })
 
     peer.on("stream", stream => {
-      if (partnerVideo.current) {
-        partnerVideo.current.srcObject = stream;
-      }
     });
 
     socket.current.on("callAccepted", signal => {
+      console.log("got this nice");
       setCallAccepted(true);
       peer.signal(signal);
     })
 
+
   }
 
-  function acceptCall() {
+function offerCall(id){
+  console.log("helo");
+	setReceivingCall(true);
+    setCaller(id);
+}
+
+function acceptCall() {
+	setReceivingCall(false);
     setCallAccepted(true);
     const peer = new Peer({
-      initiator: false,
+      initiator: true,
       trickle: false,
       stream: stream,
     });
     peer.on("signal", data => {
-      socket.current.emit("acceptCall", { signal: data, to: caller })
+      console.log("signal");
+      socket.current.emit("callUser", { userToCall: caller, signalData: data, from: yourID })
     })
 
-    peer.signal(callerSignal);
+    peer.on("stream", stream => {
+    });
+
+    socket.current.on("callAccepted", signal => {
+      console.log("got this nice");
+      setCallAccepted(true);
+      peer.signal(signal);
+    })
   }
+
+  function hungUp() {
+	socket.current.emit("hungUp", {to: caller});
+	setCallAccepted(false);
+	setCaller("");
+	
+}
 
 	let UserVideo;
   	if (stream) {

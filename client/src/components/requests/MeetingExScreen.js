@@ -39,91 +39,58 @@ export const MeetingExScreen = () => {
     */
     const request = useLocation().state;
 
-	  const [yourID, setYourID] = useState("");
-    const [users, setUsers] = useState({});
-    const [stream, setStream] = useState();
-    const [receivingCall, setReceivingCall] = useState(false);
-    const [caller, setCaller] = useState("");
-    const [callerSignal, setCallerSignal] = useState();
-    const [callAccepted, setCallAccepted] = useState(false);
+  const [yourID, setYourID] = useState("");
+  const [users, setUsers] = useState({});
+  const [stream, setStream] = useState();
+  const [receivingCall, setReceivingCall] = useState(false);
+  const [caller, setCaller] = useState("");
+  const [callerSignal, setCallerSignal] = useState();
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [coming, setComing] = useState(false);
 
     const {uid} = useSelector(state => state.auth) || [];
 
-    const userVideo = useRef();
-    const partnerVideo = useRef();
-    const socket = useRef();
+  const partnerVideo = useRef();
+  const socket = useRef();
 
     useEffect(() => {
-		console.log("1");
     	socket.current = io.connect("ws://localhost:4000");
-    	navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
-    	setStream(stream);
-      	if (userVideo.current) {
-        	userVideo.current.srcObject = stream;
-      }
-    })
+    	//navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
+    	//setStream(stream);
+    //})
     socket.current.emit("signIn", { type: "executive", id: uid});
     socket.current.on("yourID", (id) => {
-    	console.log("i got answer back from sv", id);
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
-   console.log("got users", users);
       setUsers(users);
     })
 
     socket.current.on("hey", (data) => {
-      setReceivingCall(true);
-      setCaller(data.from);
-      setCallerSignal(data.signal);
+      console.log(coming);
+      if (coming) {
+        setCaller(data.from);
+        setCallerSignal(data.signal)
+;        acceptCall()
+      } else {
+        setReceivingCall(true);
+        setCaller(data.from);
+        setCallerSignal(data.signal);
+      }
     })
   	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
-  	 function callPeer(id) {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      config: {
-
-        iceServers: [
-            {
-                urls: "stun:numb.viagenie.ca",
-                username: "sultan1640@gmail.com",
-                credential: "98376683"
-            },
-            {
-                urls: "turn:numb.viagenie.ca",
-                username: "sultan1640@gmail.com",
-                credential: "98376683"
-            }
-        ]
-    },
-      stream: false,
-    });
-
-    peer.on("signal", data => {
-      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID })
-    })
-
-    peer.on("stream", stream => {
-      if (partnerVideo.current) {
-        partnerVideo.current.srcObject = stream;
-      }
-    });
-
-    socket.current.on("callAccepted", signal => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    })
-
+  function callPeer(to) {
+    setComing(true);
+    socket.current.emit("askPeer", {to: to, signal: yourID});
   }
-  
-function acceptCall() {
+
+  function acceptCall() {
+    setReceivingCall(false);
     setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
-      trickle: false,
-      stream: false,
+      trickle: false
     });
     peer.on("signal", data => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
@@ -135,6 +102,13 @@ function acceptCall() {
 
     peer.signal(callerSignal);
   }
+
+  function hungUp() {
+  	socket.current.emit("hungUp", {to: caller});
+	setCallAccepted(false);
+	setCaller("");
+}
+
 
   	let PartnerVideo;
   if (callAccepted) {
@@ -155,6 +129,7 @@ function acceptCall() {
       </div>
     )
   }
+
 	  
 	  return (
 	  	<>
@@ -171,7 +146,7 @@ function acceptCall() {
             <button onClick={() => callPeer(key)}>Llamar cliente {users[key].id}</button>
           );
           }
-          return null;
+          return null
         })}
       </Row>
       <Row>
