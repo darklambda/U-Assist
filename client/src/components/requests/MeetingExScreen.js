@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import io from "socket.io-client";
-import Peer from "simple-peer";
+import SimplePeer from "simple-peer";
 import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 
@@ -66,28 +66,62 @@ export const MeetingExScreen = () => {
     })
 
     socket.current.on("hey", (data) => {
-      if (data.bo === "hi") {
         setReceivingCall(true);
         setCaller(data.from);
-        setCallerSignal(data.signal);    
-      } else {
-        setReceivingCall(true);
-        setCaller(data.from);
-        setCallerSignal(data.signal);
-      }
+        setCallerSignal(data.signal);   
     })
   	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
-  function callPeer(to) {
-    socket.current.emit("askPeer", {to: to, signal: yourID});
+    function callPeer(id) {
+    const peer = new SimplePeer({
+      initiator: true,
+      trickle: false,
+      config: {
+
+        iceServers: [
+            {
+                urls: "stun:numb.viagenie.ca",
+                username: "sultan1640@gmail.com",
+                credential: "98376683"
+            },
+            {
+                urls: "turn:numb.viagenie.ca",
+                username: "sultan1640@gmail.com",
+                credential: "98376683"
+            }
+        ]
+    },
+    offerOptions: { 
+      offerToReceiveAudio: true, 
+      offerToReceiveVideo: true 
+    },
+      stream: stream,
+    });
+
+    peer.on("signal", data => {
+      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID, bo: "no" })
+    })
+
+    peer.on("stream", stream => {
+    	partnerVideo.current.srcObject = stream;
+    });
+
+    socket.current.on("callAccepted", signal => {
+      setCallAccepted(true);
+      peer.signal(signal);
+    })
+
+
   }
+
 
   function acceptCall() {
     setReceivingCall(false);
     setCallAccepted(true);
-    const peer = new Peer({
+    const peer = new SimplePeer({
       initiator: false,
       trickle: false
+
     });
     peer.on("signal", data => {
       socket.current.emit("acceptCall", { signal: data, to: caller })

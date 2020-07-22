@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import io from "socket.io-client";
-import Peer from "simple-peer";
+import SimplePeer from "simple-peer";
 import styled from "styled-components";
 
 // import { useDispatch, useSelector } from 'react-redux'
@@ -64,15 +64,16 @@ export const MeetingScreen = () => {
       console.log("got users", users);
       setUsers(users);
     })
-
-    socket.current.on("askPeer", (to) => {
-      offerCall(to.peer);
+     socket.current.on("hey", (data) => {
+        setReceivingCall(true);
+        setCaller(data.from);
+        setCallerSignal(data.signal);   
     })
 
   }, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
     function callPeer(id) {
-    const peer = new Peer({
+    const peer = new SimplePeer({
       initiator: true,
       trickle: false,
       config: {
@@ -102,7 +103,6 @@ export const MeetingScreen = () => {
     });
 
     socket.current.on("callAccepted", signal => {
-      console.log("got this nice");
       setCallAccepted(true);
       peer.signal(signal);
     })
@@ -110,32 +110,28 @@ export const MeetingScreen = () => {
 
   }
 
-function offerCall(id){
-	setReceivingCall(true);
-    setCaller(id);
-}
 
-function acceptCall() {
-	setReceivingCall(false);
+
+  function acceptCall() {
+    setReceivingCall(false);
     setCallAccepted(true);
-    const peer = new Peer({
-      initiator: true,
+    const peer = new SimplePeer({
+      initiator: false,
       trickle: false,
       stream: stream,
+      answerOptions: { 
+      offerToReceiveAudio: false, 
+      offerToReceiveVideo: false 
+    }
     });
     peer.on("signal", data => {
-      console.log(data, "signal");
-      socket.current.emit("callUser", { userToCall: caller, signalData: data, from: yourID, bo:"hi" })
+      socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
     peer.on("stream", stream => {
     });
 
-    socket.current.on("callAccepted", signal => {
-      console.log("got this nice");
-      setCallAccepted(true);
-      peer.signal(signal);
-    })
+    peer.signal(callerSignal);
   }
 
   function hungUp() {
