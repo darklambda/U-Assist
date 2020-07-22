@@ -2,15 +2,12 @@ import React, { useEffect } from 'react'
 import { Navebar } from '../ui/Navebar'
 import { NewRequestModal } from './NewRequestModal'
 import { useDispatch, useSelector } from 'react-redux'
-import { uiOpenModal } from '../../actions/ui'
+import { uiOpenModal, uiOpenViewModal } from '../../actions/ui'
 import { requestStartLoading } from '../../actions/request'
-import { Link } from 'react-router-dom'
-import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
+import { ViewRequestModal } from './ViewRequestModal'
 
 export const ClientDashboard = () => {
-
-    
 
     const {requests} = useSelector(state => state.reqs) || [];
     const dispatch = useDispatch();
@@ -23,34 +20,74 @@ export const ClientDashboard = () => {
         dispatch(uiOpenModal());
     }
 
-     function mostrarCartas(categoria,id,descripcion) {
+    const handleClickDetails = (request) => {
+        dispatch(uiOpenViewModal(request));
+    }
+
+    const cartasAlta = (categoria, id, descripcion, request ) => {
         if (categoria === "Alta"){
-               return (<Card border="danger"
-                        style={{ width: '18rem' }}
-                        className="mb-3">
-               <Card.Header>SOLICITUD {id}</Card.Header>
-               <Card.Body>
-               <Card.Title>{categoria}</Card.Title>
-               <Card.Text>{descripcion}</Card.Text>
-                  </Card.Body> 
-               </Card>);}
+            return (
+                <div 
+                    className="card border-danger mb-2" 
+                    style={{width: "18rem", height: "13rem"}}
+                    onClick={() => handleClickDetails(request)}
+                >
+                    <div 
+                        className="card-header text-white bg-danger"
+                        >
+                        <strong> ID: </strong> {id} <br/>
+                        <strong> Nivel de urgencia: </strong> {categoria}
+                    </div>
+                    <div className="card-body overflow-auto">
+                        <p className="card-text">{descripcion}</p>
+                    </div>
+                </div>
+            )
+        }
+     }
+
+     const cartasMedia = (categoria, id, descripcion, request) => {
         if (categoria === "Media"){
-            return (<Card border="warning" style={{ width: '18rem' }}>
-            <Card.Header>SOLICITUD {id}</Card.Header>
-            <Card.Body>
-            <Card.Title>{categoria}</Card.Title>
-            <Card.Text>{descripcion}</Card.Text>
-               </Card.Body> 
-            </Card>);}
+            return (
+                <div 
+                    className="card border-warning mb-2" 
+                    style={{width: "18rem", height: "13rem"}}
+                    onClick={() => handleClickDetails(request)}
+                >
+                    <div 
+                        className="card-header text-dark bg-warning"
+                        >
+                        <strong> ID: </strong> {id} <br/>
+                        <strong> Nivel de urgencia: </strong> {categoria}
+                    </div>
+                    <div className="card-body overflow-auto">
+                        <p className="card-text">{descripcion}</p>
+                    </div>
+                </div>
+                )
+        }
+     }
+
+     const cartasBaja = (categoria, id, descripcion, request) => {
         if (categoria === "Baja"){
-            return (<Card border="info" style={{ width: '18rem' }}>
-            <Card.Header>SOLICITUD {id}</Card.Header>
-            <Card.Body>
-            <Card.Title>{categoria}</Card.Title>
-            <Card.Text>{descripcion}</Card.Text>
-               </Card.Body> 
-            </Card>);}
-            
+            return (
+                <div 
+                    className="card border-info mb-2" 
+                    style={{width: "18rem", height: "13rem"}}
+                    onClick={() => handleClickDetails(request)}
+                >
+                    <div 
+                        className="card-header text-light bg-info"
+                        >
+                        <strong> ID: </strong> {id} <br/>
+                        <strong> Nivel de urgencia: </strong> {categoria}
+                    </div>
+                    <div className="card-body overflow-auto">
+                        <p className="card-text">{descripcion}</p>
+                    </div>
+                </div>
+            )
+        }
      }
         
 
@@ -63,66 +100,50 @@ export const ClientDashboard = () => {
             <hr />
             <div className="d-flex justify-content-between m-4 align-items-center">
                 <h3>Mis solicitudes</h3>
-                <button className="btn btn-sm btn-outline-primary h-50" onClick={handleClick}> 
+                <button className="btn btn-sm btn-success h-50" onClick={handleClick}> 
                     <i className="fas fa-plus width-100"></i> Agregar solicitud  
                 </button>
-                <Link to="/meet">
-                    <button className="btn btn-info mr-5">
-                        Iniciar reunión
-                    </button>
-                </Link>
-                     
             </div>
             <div className="m-4">
-            <CardDeck>
-            {  
-           
+                <p>Haga click sobre la solicitud que desea revisar </p>
+            </div>
+            <div className="m-3">
+                <CardDeck>
+                {  
+                    (requests.length > 0) 
+                    && requests[0].map((i) =>
+                        <div key={i.id}> 
+                        {cartasAlta(i.categoria,i.id,i.descripcionProblema, i)}
+                        </div>
+                    )            
+                }
+                {  
                     (requests.length > 0) 
                     && requests[0].map((i) => 
                         <div key={i.id}>
-                       {mostrarCartas(i.categoria,i.id,i.descripcionProblema)}    
+                        {cartasMedia(i.categoria,i.id,i.descripcionProblema, i)}
                         </div>
-                        
-                         ) 
-                    
-                  }
-                 </CardDeck>
-
-
-            
-                 </div>
-
-{/*
-            <div className="m-4">
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                    <th scope="col">Nivel de Urgencia</th>
-                    <th scope="col">Estado de solicitud</th>
-                    <th scope="col">Detalles del problema</th>
-                    </tr>
-                </thead>
-               
-               
-               
-               
-                <tbody>
-                {   
+                    )            
+                }
+                {  
                     (requests.length > 0) 
                     && requests[0].map((i) => 
-                        <tr key={i.id}>
-                        <th >{i.categoria}</th>
-                        <td >{i.estado}</td>
-                        <td >{i.descripcionProblema}</td>
-                        </tr>
-                    ) 
+                        <div key={i.id}>
+                        {cartasBaja(i.categoria,i.id,i.descripcionProblema, i)} 
+                        </div>
+                    )            
                 }
-            </tbody>
-            </table>
-            <hr />    
+                </CardDeck>
+                <hr /> 
+                {/* <div className="d-flex justify-content-between align-items-center">
+                    <h3> WebSocket </h3>
+                    <button className="btn btn-sm btn-outline-primary h-50" > 
+                        <i className="fas fa-plus width-100"></i> CrearSocket  
+                    </button>
+                </div>      */}
             </div>
-*/}
             <NewRequestModal />
+            <ViewRequestModal />
         </>
     )
 }

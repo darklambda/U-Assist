@@ -16,8 +16,9 @@ export const types = {
 
     UI_OPEN_NEW_REQUEST_MODAL:  'Abrir modal nueva request',
     UI_CLOSE_NEW_REQUEST_MODAL: 'Cerrar modal nueva request',
-
     UI_OPEN_REQUEST_MODAL:  'Abrir modal request',
-    UI_CLOSE_REQUEST_MODAL: 'Cerrar modal request'
+    UI_CLOSE_REQUEST_MODAL: 'Cerrar modal request',
+    UI_OPEN_VIEW_MODAL: 'Abrir modal para ver detalles de solicitud',
+    UI_CLOSE_VIEW_MODAL: 'Cerrar modal para ver detalles de solicitud'
 
 }

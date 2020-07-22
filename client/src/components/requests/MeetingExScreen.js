@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
   height: 100vh;
@@ -23,7 +24,22 @@ const Video = styled.video`
 `;
 
 export const MeetingExScreen = () => {
-	const [yourID, setYourID] = useState("");
+
+    /*Aqui está la request completa, con todos los datos del ejecutivo y del cliente 
+    request = {
+      categoria,
+      client: { apellido, email, nombre, rut, telefono, id},
+      codigo,
+      descripcionProblema,
+      estado,
+      executive: {apellido, nombre, sucursal, id},
+      fechaIngreso,
+      id
+    }
+    */
+    const request = useLocation().state;
+
+	  const [yourID, setYourID] = useState("");
     const [users, setUsers] = useState({});
     const [stream, setStream] = useState();
     const [receivingCall, setReceivingCall] = useState(false);
@@ -61,7 +77,7 @@ export const MeetingExScreen = () => {
       setCaller(data.from);
       setCallerSignal(data.signal);
     })
-  	}, []);
+  	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
   	 function callPeer(id) {
     const peer = new Peer({

@@ -27,19 +27,19 @@ export const ExecutiveDashboard = () => {
         dispatch(uiOpenModal());
     }
 
-    console.log(requests.length > 0 && requests)
 
-    const handleClickToSolve = (id, descripcion, categoria) => {
-        dispatch(uiOpenSolModal({id, descripcion, categoria}));
+    // TODO: Agrega info del ejecutivo, no del cliente...  
+    const handleClickToSolve = (id, descripcion, categoria, request) => {
+        dispatch(uiOpenSolModal(request));
     }
 
-     const cartasAlta = (categoria, id, descripcion ) => {
+     const cartasAlta = (categoria, id, descripcion, request ) => {
         if (categoria === "Alta"){
             return (
                 <div 
                     className="card border-danger mb-2" 
                     style={{width: "18rem", height: "13rem"}}
-                    onClick={() => handleClickToSolve(id, descripcion, categoria)}
+                    onClick={() => handleClickToSolve(id, descripcion, categoria, request)}
                 >
                     <div 
                         className="card-header text-white bg-danger"
@@ -55,13 +55,13 @@ export const ExecutiveDashboard = () => {
         }
      }
 
-     const cartasMedia = (categoria, id, descripcion) => {
+     const cartasMedia = (categoria, id, descripcion, request) => {
         if (categoria === "Media"){
             return (
                 <div 
                     className="card border-warning mb-2" 
                     style={{width: "18rem", height: "13rem"}}
-                    onClick={() => handleClickToSolve(id, descripcion, categoria)}
+                    onClick={() => handleClickToSolve(id, descripcion, categoria, request)}
                 >
                     <div 
                         className="card-header text-dark bg-warning"
@@ -77,13 +77,13 @@ export const ExecutiveDashboard = () => {
         }
      }
 
-     const cartasBaja = (categoria, id, descripcion) => {
+     const cartasBaja = (categoria, id, descripcion, request) => {
         if (categoria === "Baja"){
             return (
                 <div 
                     className="card border-info mb-2" 
                     style={{width: "18rem", height: "13rem"}}
-                    onClick={() => handleClickToSolve(id, descripcion, categoria)}
+                    onClick={() => handleClickToSolve(id, descripcion, categoria, request)}
                 >
                     <div 
                         className="card-header text-light bg-info"
@@ -119,7 +119,7 @@ export const ExecutiveDashboard = () => {
                     (requests.length > 0) 
                     && requests[0].map((i) =>
                         <div key={i.id}> 
-                        {cartasAlta(i.categoria,i.id,i.descripcionProblema)}
+                        {cartasAlta(i.categoria,i.id,i.descripcionProblema, i)}
                         </div>
                     )            
                 }
@@ -130,7 +130,7 @@ export const ExecutiveDashboard = () => {
                     (requests.length > 0) 
                     && requests[0].map((i) => 
                         <div key={i.id}>
-                        {cartasMedia(i.categoria,i.id,i.descripcionProblema)}
+                        {cartasMedia(i.categoria,i.id,i.descripcionProblema, i)}
                         </div>
                     )            
                 }
@@ -141,18 +141,18 @@ export const ExecutiveDashboard = () => {
                     (requests.length > 0) 
                     && requests[0].map((i) => 
                         <div key={i.id}>
-                        {cartasBaja(i.categoria,i.id,i.descripcionProblema)} 
+                        {cartasBaja(i.categoria,i.id,i.descripcionProblema, i)} 
                         </div>
                     )            
                 }
                 </CardDeck>
                 <hr /> 
-                <div className="d-flex justify-content-between align-items-center">
+                {/* <div className="d-flex justify-content-between align-items-center">
                     <h3> WebSocket </h3>
                     <button className="btn btn-sm btn-outline-primary h-50" > 
                         <i className="fas fa-plus width-100"></i> CrearSocket  
                     </button>
-                </div>     
+                </div>      */}
             </div>
 
             <SelectRequestModal />

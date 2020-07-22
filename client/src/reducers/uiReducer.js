@@ -3,7 +3,9 @@ import { types } from "../types/types";
 const initialState =  {
 	isOpen: false,
 	isSolOpen: false,
-	solRequest: null
+	solRequest: null,
+	isViewOpen: false,
+	currentRequest: null
 }
 
 export const uiReducer = ( state=initialState, action) => {
@@ -30,6 +32,18 @@ export const uiReducer = ( state=initialState, action) => {
 				...state,
 				isSolOpen: false,
 				solRequest: null
+			}
+		case types.UI_OPEN_VIEW_MODAL:
+			return {
+				...state,
+				isViewOpen: true,
+				currentRequest: action.payload
+			}
+		case types.UI_CLOSE_VIEW_MODAL:
+			return {
+				...state,
+				isViewOpen: false,
+				currentRequest: null
 			}
 		default:
 			return state;

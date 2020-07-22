@@ -111,7 +111,6 @@ export const SelectRequest = () => {
     )
 }
 
-
 export const SolveRequest = (request) => {  
 
     const dispatch = useDispatch();
@@ -153,7 +152,11 @@ export const SolveRequest = (request) => {
         <>
         <div className="d-flex justify-content-between m-4 align-items-center">
             <h3>Solucionar solicitud</h3>
-            <Link to="/meet-executive">
+            <Link to={{
+                pathname:"/meet-executive",
+                state: request.request 
+            }}
+            >
                 <button className="btn btn-info mr-5">
                     Iniciar reunión
                 </button>
@@ -190,4 +193,60 @@ export const SolveRequest = (request) => {
         
         </>
     )
+}
+
+export const ViewRequest = ({request}) => {
+
+    if (!request) {
+        return (
+            <></>
+        )
+    } else {
+        const {estado, solucionProblema, categoria, 
+            descripcionProblema, fechaIngreso, ejecutivo, id} = request;
+        let color;
+        if (request.categoria === "Alta") {
+            color = "danger"
+        } else if (request.categoria === "Media") {
+            color = "warning"
+        } else {
+            color = "info"
+        }
+
+        return (
+            <>
+            <div 
+                className={`card border-${color} mb-2`}
+                style={{width: "100%", height: "100%"}}
+            >
+                <div 
+                    className= {`card-header text-${color ==="warning" ? "dark" : "white"} bg-${color}`}
+                    >
+                    <strong> ID: </strong> {id} <br/>
+                    <strong> Nivel de urgencia: </strong> {categoria} <br/>
+                    <strong> Estado: </strong> {estado} <br/>
+                    {ejecutivo && <strong> ID Ejecutivo: {ejecutivo} </strong>}
+                </div>
+                <div className="card-body overflow-auto">
+                    <strong> Fecha de ingreso: </strong> 
+                    <p className="card-text">{Date(fechaIngreso)}</p>
+                    <strong> Descripción: </strong> 
+                    <p className="card-text">{descripcionProblema}</p>
+                    <strong> Solución: </strong> 
+                    <p className="card-text">{solucionProblema}</p>
+                    <hr />
+                    <div className="text-center">
+                        <Link to="/meet">
+                        <button className="btn btn-success mr-5">
+                            Iniciar reunión
+                        </button>
+                        </Link>
+                    </div>
+                    
+                </div>
+            </div>
+            </>
+        )
+    }
+
 }

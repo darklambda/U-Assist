@@ -35,7 +35,7 @@ export const MeetingScreen = () => {
     const [callerSignal, setCallerSignal] = useState();
     const [callAccepted, setCallAccepted] = useState(false);
 
-    const {uid} = useSelector(state => state.auth) || [];
+    const {uid} = useSelector(state => state.auth);
 
     const userVideo = useRef();
     const partnerVideo = useRef();
@@ -69,7 +69,7 @@ export const MeetingScreen = () => {
       setCaller(data.from);
       setCallerSignal(data.signal);
     })
-  }, []);
+  }, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
     function callPeer(id) {
     const peer = new Peer({
@@ -127,7 +127,7 @@ export const MeetingScreen = () => {
 	let UserVideo;
   	if (stream) {
     	UserVideo = (
-      		<video playsInline muted ref={userVideo} autoPlay style={{
+      		<Video playsInline muted ref={userVideo} autoPlay style={{
 				width:'100%',
 				height:'75vh'
 			}}/>
@@ -139,7 +139,7 @@ export const MeetingScreen = () => {
   if (receivingCall) {
     incomingCall = (
       <div>
-        <h1>{caller} is calling you</h1>
+        <h4>{caller} is calling you</h4>
         <button onClick={acceptCall}>Accept</button>
       </div>
     )
@@ -148,7 +148,7 @@ export const MeetingScreen = () => {
 	  return (
 	  	<>
 	  	<div className="m-4 ">
-	  		<h1>Reunión</h1>
+    <h1>Reunión {callAccepted}</h1>
 	  		<Container>
       <Row>
         {UserVideo}
@@ -160,7 +160,7 @@ export const MeetingScreen = () => {
             <button onClick={() => callPeer(key)}>Llamar ejecutivo {users[key].id}</button>
           );
           }
-          return
+          return null
         })}
       </Row>
       <Row>

@@ -16,3 +16,12 @@ export const uiOpenSolModal = (data) => ({
 export const uiCloseSolModal = () => ({
 	type: types.UI_CLOSE_REQUEST_MODAL
 });
+
+export const uiOpenViewModal = (data) => ({
+	type: types.UI_OPEN_VIEW_MODAL,
+	payload: data
+});
+
+export const uiCloseViewModal = () => ({
+	type: types.UI_CLOSE_VIEW_MODAL,
+});

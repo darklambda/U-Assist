@@ -18,7 +18,8 @@ const getRequestsClient = async(req, res=response) => {
 const getRequestsExecutive = async(req, res=response) => {
 
     const requests = await Request.find({executive: req.uid})
-                                  .populate('executive', 'nombre apellido sucursal');
+                                  .populate('executive', 'nombre apellido sucursal')
+                                  .populate('client', 'nombre apellido rut email telefono');
 
     return res.json({
         ok: true,
