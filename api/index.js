@@ -33,9 +33,17 @@ const io = socket(server);
 const users = {};
 
 io.on('connection', socket => {
-    if (!users[socket.id]) {
-        users[socket.id] = socket.id;
+    socket.on("signIn", (data) => {
+        if (!users[socket.id]) {
+        users[socket.id] = {};
+        users[socket.id].soc = socket.id;
+        users[socket.id].type = data.type;
+        users[socket.id].id = data.id;
+        io.sockets.emit("allUsers", users);
+        console.log(users);
+        console.log("-----------------------")
     }
+    })
     socket.emit("yourID", socket.id);
     io.sockets.emit("allUsers", users);
     socket.on('disconnect', () => {
@@ -43,7 +51,6 @@ io.on('connection', socket => {
     })
 
     socket.on("callUser", (data) => {
-        console.log("???");
         io.to(data.userToCall).emit('hey', {signal: data.signalData, from: data.from});
     })
 

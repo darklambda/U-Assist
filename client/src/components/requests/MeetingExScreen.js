@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
@@ -22,13 +23,15 @@ const Video = styled.video`
 `;
 
 export const MeetingExScreen = () => {
-	   const [yourID, setYourID] = useState("");
+	const [yourID, setYourID] = useState("");
     const [users, setUsers] = useState({});
     const [stream, setStream] = useState();
     const [receivingCall, setReceivingCall] = useState(false);
     const [caller, setCaller] = useState("");
     const [callerSignal, setCallerSignal] = useState();
     const [callAccepted, setCallAccepted] = useState(false);
+
+    const {uid} = useSelector(state => state.auth) || [];
 
     const userVideo = useRef();
     const partnerVideo = useRef();
@@ -43,12 +46,13 @@ export const MeetingExScreen = () => {
         	userVideo.current.srcObject = stream;
       }
     })
-
+    socket.current.emit("signIn", { type: "executive", id: uid});
     socket.current.on("yourID", (id) => {
     	console.log("i got answer back from sv", id);
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
+   console.log("got users", users);
       setUsers(users);
     })
 
@@ -59,7 +63,7 @@ export const MeetingExScreen = () => {
     })
   	}, []);
 
-  	    function callPeer(id) {
+  	 function callPeer(id) {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -78,7 +82,7 @@ export const MeetingExScreen = () => {
             }
         ]
     },
-      stream: stream,
+      stream: false,
     });
 
     peer.on("signal", data => {
@@ -103,7 +107,7 @@ function acceptCall() {
     const peer = new Peer({
       initiator: false,
       trickle: false,
-      stream: stream,
+      stream: false,
     });
     peer.on("signal", data => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
@@ -116,20 +120,13 @@ function acceptCall() {
     peer.signal(callerSignal);
   }
 
-	let UserVideo;
-  	if (stream) {
-    	UserVideo = (
-      		<video playsInline muted ref={userVideo} autoPlay style={{
-				width:'100%',
-				height:'75vh'
-			}}/>
-    	);
-  	}
-
   	let PartnerVideo;
   if (callAccepted) {
     PartnerVideo = (
-      <Video playsInline ref={partnerVideo} autoPlay />
+      <Video playsInline ref={partnerVideo} autoPlay tyle={{
+				width:'50%',
+				height:'75vh'
+			}}/>
     );
   }
 
@@ -149,17 +146,16 @@ function acceptCall() {
 	  		<h1>Reunión</h1>
 	  		<Container>
       <Row>
-        {UserVideo}
         {PartnerVideo}
       </Row>
       <Row>
         {Object.keys(users).map(key => {
-          if (key === yourID) {
-            return null;
-          }
-          return (
-            <button onClick={() => callPeer(key)}>Call {key}</button>
+          if (users[key].type === "client") {
+            return (
+            <button onClick={() => callPeer(key)}>Llamar cliente {users[key].id}</button>
           );
+          }
+          return null;
         })}
       </Row>
       <Row>

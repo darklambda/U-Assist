@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
@@ -34,6 +35,8 @@ export const MeetingScreen = () => {
     const [callerSignal, setCallerSignal] = useState();
     const [callAccepted, setCallAccepted] = useState(false);
 
+    const {uid} = useSelector(state => state.auth) || [];
+
     const userVideo = useRef();
     const partnerVideo = useRef();
     const socket = useRef();
@@ -42,21 +45,22 @@ export const MeetingScreen = () => {
 
 	// const dispatch = useDispatch();
 
-	  useEffect(() => {
-	 console.log("1");
-    socket.current = io.connect("ws://localhost:4000");
-    navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
-      setStream(stream);
-      if (userVideo.current) {
-        userVideo.current.srcObject = stream;
+	useEffect(() => {
+		console.log("1");
+    	socket.current = io.connect("ws://localhost:4000");
+    	navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
+    	setStream(stream);
+      	if (userVideo.current) {
+        	userVideo.current.srcObject = stream;
       }
     })
-
+    socket.current.emit("signIn", { type: "client", id: uid});
     socket.current.on("yourID", (id) => {
     	console.log("i got answer back from sv", id);
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
+      console.log("got users", users);
       setUsers(users);
     })
 
@@ -117,10 +121,6 @@ export const MeetingScreen = () => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
-    peer.on("stream", stream => {
-      partnerVideo.current.srcObject = stream;
-    });
-
     peer.signal(callerSignal);
   }
 
@@ -134,12 +134,6 @@ export const MeetingScreen = () => {
     	);
   	}
 
-  	let PartnerVideo;
-  if (callAccepted) {
-    PartnerVideo = (
-      <Video playsInline ref={partnerVideo} autoPlay />
-    );
-  }
 
   	let incomingCall;
   if (receivingCall) {
@@ -158,16 +152,15 @@ export const MeetingScreen = () => {
 	  		<Container>
       <Row>
         {UserVideo}
-        {PartnerVideo}
       </Row>
       <Row>
         {Object.keys(users).map(key => {
-          if (key === yourID) {
-            return null;
-          }
-          return (
-            <button onClick={() => callPeer(key)}>Call {key}</button>
+          if (users[key].type === "executive") {
+            return (
+            <button onClick={() => callPeer(key)}>Llamar ejecutivo {users[key].id}</button>
           );
+          }
+          return
         })}
       </Row>
       <Row>
