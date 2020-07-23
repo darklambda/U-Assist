@@ -34,6 +34,7 @@ export const MeetingScreen = () => {
     const [caller, setCaller] = useState("");
     const [callerSignal, setCallerSignal] = useState();
     const [callAccepted, setCallAccepted] = useState(false);
+    const [bo, setBo] = useState(true);
 
     const {uid} = useSelector(state => state.auth);
 
@@ -57,17 +58,16 @@ export const MeetingScreen = () => {
     })
     socket.current.emit("signIn", { type: "client", id: uid});
     socket.current.on("yourID", (id) => {
-    	console.log("i got answer back from sv", id);
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
-      console.log("got users", users);
       setUsers(users);
     })
      socket.current.on("hey", (data) => {
+      console.log("i got hey");
         setReceivingCall(true);
         setCaller(data.from);
-        setCallerSignal(data.signal);   
+        setCallerSignal(data.signal);    
     })
 
   }, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
@@ -95,8 +95,7 @@ export const MeetingScreen = () => {
     });
 
     peer.on("signal", data => {
-    	console.log(data, "signal");
-      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID, bo: "no" })
+      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID})
     })
 
     peer.on("stream", stream => {
@@ -153,7 +152,7 @@ export const MeetingScreen = () => {
 
 
   	let incomingCall;
-  if (receivingCall) {
+  if ((receivingCall ^ callAccepted )) {
     incomingCall = (
       <div>
         <h4>El ejecutivo esta pidiendo comenzar la llamada</h4>

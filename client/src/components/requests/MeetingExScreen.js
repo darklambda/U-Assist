@@ -61,12 +61,12 @@ export const MeetingExScreen = () => {
       setYourID(id);
     })
     socket.current.on("allUsers", (users) => {
-      console.log(users);
       setUsers(users);
     })
 
     socket.current.on("hey", (data) => {
-        setReceivingCall(true);
+    	console.log("i got hey");
+    	setReceivingCall(true);
         setCaller(data.from);
         setCallerSignal(data.signal);   
     })
@@ -94,12 +94,11 @@ export const MeetingExScreen = () => {
     offerOptions: { 
       offerToReceiveAudio: true, 
       offerToReceiveVideo: true 
-    },
-      stream: stream,
+    }
     });
 
     peer.on("signal", data => {
-      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID, bo: "no" })
+      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID})
     })
 
     peer.on("stream", stream => {
@@ -116,7 +115,7 @@ export const MeetingExScreen = () => {
 
 
   function acceptCall() {
-    setReceivingCall(false);
+  	setReceivingCall(false);
     setCallAccepted(true);
     const peer = new SimplePeer({
       initiator: false,
@@ -156,8 +155,7 @@ let callbutton;
     callbutton = (
       <div>
         {Object.keys(users).map(key => {
-          console.log(users[key].type, typeof request.client._id, typeof request.client._id)
-          if (users[key].id === request.client._id) {
+        	if (users[key].id === request.client._id) {
             return (
             <button onClick={() => callPeer(key)}>El cliente esta online</button>
           );
