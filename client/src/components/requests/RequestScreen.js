@@ -134,9 +134,8 @@ export const SolveRequest = (request) => {
             const estado = "Solucionada";
             
             try {
-                
                 const id = request.request.id;
-                const descripcionProblema = request.request.descripcion;
+                const descripcionProblema = request.request.descripcionProblema;
                 const categoria = request.request.categoria;
                 dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema}))
                 dispatch(uiCloseModal());

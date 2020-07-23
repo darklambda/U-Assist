@@ -25,7 +25,7 @@ export const Navebar = () => {
             <Navbar bg="dark" className="justify-content-center" variant="dark">
                 <Navbar.Text> ¡Hola, {nombre}! </Navbar.Text>  
             </Navbar>
-            <Navbar bg="danger" variant="dark" style={{}}>
+            <Navbar bg="primary" variant="dark" style={{}}>
                 <img
                     src={logo}
                     width="50"
