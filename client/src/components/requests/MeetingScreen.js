@@ -42,17 +42,16 @@ export const MeetingScreen = () => {
 		})
 		socket.current.emit("signIn", { type: "client", id: uid});
 		socket.current.on("yourID", (id) => {
-			console.log("i got answer back from sv", id);
 			setYourID(id);
 		})
 		socket.current.on("allUsers", (users) => {
-			console.log("got users", users);
 			setUsers(users);
 		})
-
-		socket.current.on("askPeer", (to) => {
-			offerCall(to.peer);
-		})
+    socket.current.on("hey", (data) => {
+        setReceivingCall(true);
+        setCaller(data.from);
+        setCallerSignal(data.signal);   
+    })
 
 	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
@@ -79,7 +78,6 @@ export const MeetingScreen = () => {
 		});
 
 		peer.on("signal", data => {
-			console.log(data, "signal");
 			socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID, bo: "no" })
 		})
 
@@ -95,33 +93,28 @@ export const MeetingScreen = () => {
 
 	}
 
-function offerCall(id){
-	setReceivingCall(true);
-		setCaller(id);
-}
 
-function acceptCall() {
-	setReceivingCall(false);
-		setCallAccepted(true);
-		const peer = new Peer({
-			initiator: true,
-			trickle: false,
-			stream: stream,
-		});
-		peer.on("signal", data => {
-			console.log(data, "signal");
-			socket.current.emit("callUser", { userToCall: caller, signalData: data, from: yourID, bo:"hi" })
-		})
+  function acceptCall() {
+    setReceivingCall(false);
+    setCallAccepted(true);
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      answerOptions: { 
+      answerToReceiveAudio: false, 
+      answerToReceiveVideo: false 
+    },
+    stream: stream
+    });
+    peer.on("signal", data => {
+      socket.current.emit("acceptCall", { signal: data, to: caller })
+    })
 
-		peer.on("stream", stream => {
-		});
+    peer.on("stream", stream => {
+    });
 
-		socket.current.on("callAccepted", signal => {
-			console.log("got this nice");
-			setCallAccepted(true);
-			peer.signal(signal);
-		})
-	}
+    peer.signal(callerSignal);
+  }
 
 	function hungUp() {
 	socket.current.emit("hungUp", {to: caller});
@@ -141,15 +134,15 @@ function acceptCall() {
 		}
 
 
-		let incomingCall;
-	if (receivingCall) {
-		incomingCall = (
-			<div>
-				<h4>{caller} is calling you</h4>
-				<button onClick={acceptCall}>Accept</button>
-			</div>
-		)
-	}
+  let incomingCall;
+  if (receivingCall ^ callAccepted) {
+    incomingCall = (
+      <div>
+        <p>{caller} te está llamando </p>
+        <button className="btn btn-success" onClick={acceptCall}>Aceptar</button>
+      </div>
+    )
+  }
 
 	const handleClickVolver = () => {
 		window.location.replace('/client-dashboard')

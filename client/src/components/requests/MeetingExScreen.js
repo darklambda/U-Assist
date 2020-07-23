@@ -53,21 +53,50 @@ export const MeetingExScreen = () => {
     })
 
     socket.current.on("hey", (data) => {
-      if (data.bo === "hi") {
         setReceivingCall(true);
         setCaller(data.from);
-        setCallerSignal(data.signal);    
-      } else {
-        setReceivingCall(true);
-        setCaller(data.from);
-        setCallerSignal(data.signal);
-      }
+        setCallerSignal(data.signal);   
     })
   	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
-  function callPeer(to) {
-    socket.current.emit("askPeer", {to: to, signal: yourID});
-  }
+		function callPeer(id) {
+		const peer = new Peer({
+			initiator: true,
+			trickle: false,
+			config: {
+
+				iceServers: [
+						{
+								urls: "stun:numb.viagenie.ca",
+								username: "sultan1640@gmail.com",
+								credential: "98376683"
+						},
+						{
+								urls: "turn:numb.viagenie.ca",
+								username: "sultan1640@gmail.com",
+								credential: "98376683"
+						}
+				]
+		},
+		offerOptions: { 
+      offerToReceiveAudio: true, 
+      offerToReceiveVideo: true 
+    }
+	});
+
+		peer.on("signal", data => {
+			socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID, bo: "no" })
+		})
+
+		peer.on("stream", stream => {
+			partnerVideo.current.srcObject = stream;
+		});
+
+		socket.current.on("callAccepted", signal => {
+			setCallAccepted(true);
+			peer.signal(signal);
+		})
+	}
 
   function acceptCall() {
     setReceivingCall(false);
@@ -86,12 +115,6 @@ export const MeetingExScreen = () => {
 
     peer.signal(callerSignal);
   }
-
-  function hungUp() {
-  	socket.current.emit("hungUp", {to: caller});
-	setCallAccepted(false);
-	setCaller("");
-}
 
 
   	let PartnerVideo;
@@ -118,7 +141,7 @@ export const MeetingExScreen = () => {
     window.location.replace('/executive-dashboard')
   }
 
-  const variables_no_usadas = {stream, setStream, hungUp, users, callPeer, callAccepted}
+  const variables_no_usadas = {stream, setStream, users, callPeer, callAccepted}
   console.log(variables_no_usadas && '')
 
 	  
@@ -150,7 +173,7 @@ export const MeetingExScreen = () => {
 				<p> <strong> Correo: </strong> {request.client.email} </p>
 				<p> <strong> Teléfono: </strong> {request.client.telefono} </p> 
 				<hr/>
-        {/* {Object.keys(users).map(key => {
+        {Object.keys(users).map(key => {
           if (users[key].type === "client") {
             return (
             <button key={users[key].id} className="btn btn-primary col-12" onClick={() => callPeer(key)}>Llamar a cliente {request.client.nombre} {request.client.apellido}
@@ -159,7 +182,7 @@ export const MeetingExScreen = () => {
           }
           return null
         })}
-        <hr /> */}
+        <hr /> 
         {incomingCall}
 			</div>
 			</div>
