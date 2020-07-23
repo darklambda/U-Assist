@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 
 const Video = styled.video`
-  border: 1px solid black;
   width: 50%;
   height: 50%;
 `;
@@ -98,8 +97,8 @@ export const MeetingExScreen = () => {
   	let PartnerVideo;
   if (callAccepted) {
     PartnerVideo = (
-      <Video playsInline ref={partnerVideo} autoPlay tyle={{
-				width:'50%',
+      <Video playsInline ref={partnerVideo} autoPlay style={{
+				width:'100%',
 				height:'75vh'
 			}}/>
     );
@@ -109,20 +108,30 @@ export const MeetingExScreen = () => {
   if (receivingCall) {
     incomingCall = (
       <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
+        <p>{caller} te está llamando </p>
+        <button className="btn btn-success" onClick={acceptCall}>Aceptar</button>
       </div>
     )
   }
 
-  const variables_no_usadas = {stream, setStream, hungUp}
+  const handleClickVolver = () => {
+    window.location.replace('/executive-dashboard')
+  }
+
+  const variables_no_usadas = {stream, setStream, hungUp, users, callPeer, callAccepted}
   console.log(variables_no_usadas && '')
 
 	  
 	  return (
 	  	<>
       <div>
-			<h1 className="m-2">Reunión {callAccepted} </h1>
+        <div className="d-flex justify-content-between m-4 align-items-center">
+        <h1 className="m-2">Reunión </h1>
+        <button className="btn btn-info" onClick={handleClickVolver}>
+          <i className="fas fa-arrow-left"></i> Volver
+        </button>
+        </div>
+			
 			<div className="row m-2">
 			<div className="bg-danger col-md-8 border" style={{height: "75vh"}}>
 			{PartnerVideo}
@@ -141,17 +150,16 @@ export const MeetingExScreen = () => {
 				<p> <strong> Correo: </strong> {request.client.email} </p>
 				<p> <strong> Teléfono: </strong> {request.client.telefono} </p> 
 				<hr/>
-        {Object.keys(users).map(key => {
+        {/* {Object.keys(users).map(key => {
           if (users[key].type === "client") {
             return (
-            <button onClick={() => callPeer(key)}>Llamar cliente 
-            {(users[key].id === request.client.id) && request.client.nombre + ' ' + request.client.apellido}
+            <button key={users[key].id} className="btn btn-primary col-12" onClick={() => callPeer(key)}>Llamar a cliente {request.client.nombre} {request.client.apellido}
             </button>
           );
           }
           return null
         })}
-        <hr />
+        <hr /> */}
         {incomingCall}
 			</div>
 			</div>

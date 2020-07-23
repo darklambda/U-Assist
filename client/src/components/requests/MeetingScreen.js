@@ -151,14 +151,23 @@ function acceptCall() {
 		)
 	}
 
+	const handleClickVolver = () => {
+		window.location.replace('/executive-dashboard')
+	  }
+
 	/* agregado solo para que no aparezca el warning ordinario */
-	const variables_no_usadas = {callerSignal, setCallerSignal, partnerVideo, hungUp, incomingCall};
+	const variables_no_usadas = {callerSignal, setCallerSignal, partnerVideo, hungUp, incomingCall, callAccepted};
 	console.log(variables_no_usadas && '')
 		
 		return (
 			<>
 			<div>
-			<h1 className="m-2">Reunión {callAccepted} </h1>
+			<div className="d-flex justify-content-between m-4 align-items-center">
+        <h1 className="m-2">Reunión </h1>
+        <button className="btn btn-info" onClick={handleClickVolver}>
+          <i className="fas fa-arrow-left"></i> Volver
+        </button>
+        </div>
 			<div className="row m-2">
 			<div className="bg-danger col-md-8 border" style={{height: "75vh"}}>
 			{UserVideo}
@@ -180,11 +189,14 @@ function acceptCall() {
 			{Object.keys(users).map(key => {
 				if (users[key].type === "executive") {
 					return (
-					<button className="btn btn-primary col-10" key={users[key].id} onClick={() => callPeer(key)}>Llamar a ejecutivo {users[key].id}</button>
+					<button className="btn btn-primary col-10" key={users[key].id} 
+					onClick={() => callPeer(key)}>Llamar a ejecutivo {request.executive.nombre} {request.executive.apellido}</button>
 				);
 				}
 				return null
 			})}
+			<hr />
+			{incomingCall}
 			</div>
 			</div>
 			</div>
