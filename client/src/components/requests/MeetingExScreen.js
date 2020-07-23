@@ -131,8 +131,8 @@ export const MeetingExScreen = () => {
   if (receivingCall) {
     incomingCall = (
       <div>
-        <p>{caller} te está llamando </p>
-        <button className="btn btn-success" onClick={acceptCall}>Aceptar</button>
+        <p>El cliente te está llamando </p>
+        <button className="btn btn-success" onClick={acceptCall}>Aceptar llamada</button>
       </div>
     )
   }
@@ -174,7 +174,7 @@ export const MeetingExScreen = () => {
 				<p> <strong> Teléfono: </strong> {request.client.telefono} </p> 
 				<hr/>
         {Object.keys(users).map(key => {
-          if (users[key].type === "client") {
+          if (users[key].type === "client" && !callAccepted) {
             return (
             <button key={users[key].id} className="btn btn-primary col-12" onClick={() => callPeer(key)}>Llamar a cliente {request.client.nombre} {request.client.apellido}
             </button>

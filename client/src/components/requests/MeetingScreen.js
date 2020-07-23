@@ -21,6 +21,7 @@ export const MeetingScreen = () => {
 		const [caller, setCaller] = useState("");
 		const [callerSignal, setCallerSignal] = useState();
 		const [callAccepted, setCallAccepted] = useState(false);
+    const [boo, setBoo] = useState(false);
 
 		const {uid} = useSelector(state => state.auth);
 
@@ -48,6 +49,7 @@ export const MeetingScreen = () => {
 			setUsers(users);
 		})
     socket.current.on("hey", (data) => {
+        setBoo(true);
         setReceivingCall(true);
         setCaller(data.from);
         setCallerSignal(data.signal);   
@@ -138,8 +140,8 @@ export const MeetingScreen = () => {
   if (receivingCall ^ callAccepted) {
     incomingCall = (
       <div>
-        <p>{caller} te está llamando </p>
-        <button className="btn btn-success" onClick={acceptCall}>Aceptar</button>
+        <p>El ejecutivo te está llamando </p>
+        <button className="btn btn-success" onClick={acceptCall}>Aceptar llamada</button>
       </div>
     )
   }
@@ -180,7 +182,7 @@ export const MeetingScreen = () => {
 				<p> <strong> Teléfono: </strong> {request.executive.telefono} </p> 
 				<hr/>
 			{Object.keys(users).map(key => {
-				if (users[key].type === "executive") {
+				if (users[key].type === "executive" && !callAccepted) {
 					return (
 					<button className="btn btn-primary col-10" key={users[key].id} 
 					onClick={() => callPeer(key)}>Llamar a ejecutivo {request.executive.nombre} {request.executive.apellido}</button>
