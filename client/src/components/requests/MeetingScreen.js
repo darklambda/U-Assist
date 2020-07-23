@@ -150,6 +150,10 @@ function acceptCall() {
 			</div>
 		)
 	}
+
+	/* agregado solo para que no aparezca el warning ordinario */
+	const variables_no_usadas = {callerSignal, setCallerSignal, partnerVideo, hungUp, incomingCall};
+	console.log(variables_no_usadas && '')
 		
 		return (
 			<>

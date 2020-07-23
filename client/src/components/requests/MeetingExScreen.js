@@ -115,6 +115,9 @@ export const MeetingExScreen = () => {
     )
   }
 
+  const variables_no_usadas = {stream, setStream, hungUp}
+  console.log(variables_no_usadas && '')
+
 	  
 	  return (
 	  	<>

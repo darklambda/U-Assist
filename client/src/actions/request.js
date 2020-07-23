@@ -76,7 +76,7 @@ export const startgettingRequests = (event) => {
 
 export const startUpdatingRequests = (event) => {
     return async(dispatch) => {
-        console.log('evento',event)
+        
         try {
             const resp = await fetchConToken(`requests/${event.id}`, event, 'PUT');
             const body = await resp.json();
@@ -85,7 +85,14 @@ export const startUpdatingRequests = (event) => {
                 dispatch(requestUpdated(event));
                 Swal.fire('', 'Solicitud actualizada correctamente', 'success');
             } else {
-                console.log(body.errors)
+                if (body.errors) {
+                    let errs = Object.entries(body.errors).map((k) => {
+                        return k[1].msg;
+                    }).join('<br>')
+                    Swal.fire('Error', errs, 'error');
+                } else {
+                    Swal.fire('Error', body.msg, 'error');
+                }
             }
 
         } catch (error) {

@@ -25,7 +25,7 @@ export const ClientDashboard = () => {
     }
 
     const cartasAlta = (categoria, id, descripcion, request ) => {
-        if (categoria === "Alta"){
+        if (categoria === "Alta" && request.estado !== "Solucionada"){
             return (
                 <div 
                     className="card border-danger mb-2" 
@@ -47,7 +47,7 @@ export const ClientDashboard = () => {
      }
 
      const cartasMedia = (categoria, id, descripcion, request) => {
-        if (categoria === "Media"){
+        if (categoria === "Media"&& request.estado !== "Solucionada"){
             return (
                 <div 
                     className="card border-warning mb-2" 
@@ -69,7 +69,7 @@ export const ClientDashboard = () => {
      }
 
      const cartasBaja = (categoria, id, descripcion, request) => {
-        if (categoria === "Baja"){
+        if (categoria === "Baja" && request.estado !== "Solucionada"){
             return (
                 <div 
                     className="card border-info mb-2" 
@@ -78,6 +78,28 @@ export const ClientDashboard = () => {
                 >
                     <div 
                         className="card-header text-light bg-info"
+                        >
+                        <strong> ID: </strong> {id} <br/>
+                        <strong> Nivel de urgencia: </strong> {categoria}
+                    </div>
+                    <div className="card-body overflow-auto">
+                        <p className="card-text">{descripcion}</p>
+                    </div>
+                </div>
+            )
+        }
+     }
+
+     const cartasSol = (categoria, id, descripcion, request) => {
+        if (request.estado === "Solucionada"){
+            return (
+                <div 
+                    className="card border-success mb-2" 
+                    style={{width: "18rem", height: "13rem"}}
+                    onClick={() => handleClickDetails(request)}
+                >
+                    <div 
+                        className="card-header text-light bg-success"
                         >
                         <strong> ID: </strong> {id} <br/>
                         <strong> Nivel de urgencia: </strong> {categoria}
@@ -134,7 +156,20 @@ export const ClientDashboard = () => {
                     )            
                 }
                 </CardDeck>
-                <hr /> 
+                <hr />
+                <div>
+                    <h3>Solicitudes resueltas</h3>
+                </div>
+                <CardDeck>
+                {  
+                    (requests.length > 0) 
+                    && requests[0].map((i) =>
+                        <div key={i.id}> 
+                        {cartasSol(i.categoria,i.id,i.descripcionProblema, i)}
+                        </div>
+                    )            
+                }
+                </CardDeck> 
                 {/* <div className="d-flex justify-content-between align-items-center">
                     <h3> WebSocket </h3>
                     <button className="btn btn-sm btn-outline-primary h-50" > 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
 import { createRequest, startgettingRequests, startUpdatingRequests} from '../../actions/request';
 import './request.css';
-import { uiCloseModal } from '../../actions/ui';
+import { uiCloseModal, uiCloseSolModal } from '../../actions/ui';
 import Checkbox from '@material-ui/core/Checkbox';
 
 
@@ -134,12 +134,11 @@ export const SolveRequest = (request) => {
             const estado = "Solucionada";
             
             try {
-                
                 const id = request.request.id;
-                const descripcionProblema = request.request.descripcion;
+                const descripcionProblema = request.request.descripcionProblema;
                 const categoria = request.request.categoria;
                 dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema}))
-                dispatch(uiCloseModal());
+                dispatch(uiCloseSolModal());
 
             } catch (error) {
                 console.log("Detallito");
@@ -213,47 +212,75 @@ export const ViewRequest = ({request}) => {
             color = "info"
         }
 
-        return (
-            <>
-            <div 
-                className={`card border-${color} mb-2`}
-                style={{width: "100%", height: "100%"}}
-            >
+        if (request.estado !== "Solucionada"){
+            return (
+                <>
                 <div 
-                    className= {`card-header text-${color ==="warning" ? "dark" : "white"} bg-${color}`}
-                    >
-                    <strong> ID: </strong> {id} <br/>
-                    <strong> Nivel de urgencia: </strong> {categoria} <br/>
-                    <strong> Estado: </strong> {estado} <br/>
-                    {executive && <strong> ID Ejecutivo: {executive.id} </strong>}
-                </div>
-                <div className="card-body overflow-auto">
-                    <strong> Fecha de ingreso: </strong> 
-                    <p className="card-text">{Date(fechaIngreso)}</p>
-                    <strong> Descripción: </strong> 
-                    <p className="card-text">{descripcionProblema}</p>
-                    <strong> Solución: </strong> 
-                    <p className="card-text">{solucionProblema}</p>
-                    <hr />
-                    <div className="text-center">
-                        { executive ?
-                            <Link to={{
-                                pathname: "/meet",
-                                state: request
-                            }}>
-                            <button className="btn btn-success mr-5">
-                                Iniciar reunión
-                            </button>
-                            </Link>
-                            :
-                            <button className="btn btn-secondary disabled col-4">Procesando solicitud</button>
-                        }
+                    className={`card border-${color} mb-2`}
+                    style={{width: "100%", height: "100%"}}
+                >
+                    <div 
+                        className= {`card-header text-${color ==="warning" ? "dark" : "white"} bg-${color}`}
+                        >
+                        <strong> ID: </strong> {id} <br/>
+                        <strong> Nivel de urgencia: </strong> {categoria} <br/>
+                        <strong> Estado: </strong> {estado} <br/>
+                        {executive && <p> <strong> Ejecutivo: </strong> {executive.nombre} {executive.apellido} </p>}
                     </div>
-                    
+                    <div className="card-body overflow-auto">
+                        <strong> Fecha de ingreso: </strong> 
+                        <p className="card-text">{Date(fechaIngreso)}</p>
+                        <strong> Descripción: </strong> 
+                        <p className="card-text">{descripcionProblema}</p>
+                        <strong> Solución: </strong> 
+                        <p className="card-text">{solucionProblema}</p>
+                        <hr />
+                        <div className="text-center">
+                            { executive ?
+                                <Link to={{
+                                    pathname: "/meet",
+                                    state: request
+                                }}>
+                                <button className="btn btn-success mr-5">
+                                    Iniciar reunión
+                                </button>
+                                </Link>
+                                :
+                                <button className="btn btn-secondary disabled col-4">Procesando solicitud</button>
+                            }
+                        </div>
+                        
+                    </div>
                 </div>
-            </div>
-            </>
-        )
+                </>
+            )
+        } else {
+            return (
+                <>
+                <div 
+                    className="card border-success mb-2"
+                    style={{width: "100%", height: "100%"}}
+                >
+                    <div 
+                        className="card-header text-white bg-success"
+                        >
+                        <strong> ID: </strong> {id} <br/>
+                        <strong> Nivel de urgencia: </strong> {categoria} <br/>
+                        <strong> Estado: </strong> {estado} <br/>
+                        {executive && <p> <strong> Ejecutivo: </strong> {executive.nombre} {executive.apellido} </p>}
+                    </div>
+                    <div className="card-body overflow-auto">
+                        <strong> Fecha de ingreso: </strong> 
+                        <p className="card-text">{Date(fechaIngreso)}</p>
+                        <strong> Descripción: </strong> 
+                        <p className="card-text">{descripcionProblema}</p>
+                        <strong> Solución: </strong> 
+                        <p className="card-text">{solucionProblema}</p>            
+                    </div>
+                </div>
+                </>
+            )
+        }
     }
 
 }

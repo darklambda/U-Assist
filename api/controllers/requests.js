@@ -6,7 +6,8 @@ const Client = require('../models/Client');
 const getRequestsClient = async(req, res=response) => {
 
     const requests = await Request.find({client: req.uid})
-                                  .populate('client', 'nombre apellido rut');
+                                  .populate('client', 'nombre apellido rut')
+                                  .populate('executive', 'nombre apellido sucursal email telefono');
 
     return res.json({
         ok: true,
