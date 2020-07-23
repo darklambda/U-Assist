@@ -1,30 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import io from "socket.io-client";
-import SimplePeer from "simple-peer";
+import Peer from "simple-peer";
 import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
 const Video = styled.video`
-  border: 1px solid blue;
+  border: 1px solid black;
   width: 50%;
   height: 50%;
 `;
 
 export const MeetingExScreen = () => {
-  /*
+
+    /*Aqui está la request completa, con todos los datos del ejecutivo y del cliente 
     request = {
       categoria,
       client: { apellido, email, nombre, rut, telefono, id},
@@ -65,62 +54,28 @@ export const MeetingExScreen = () => {
     })
 
     socket.current.on("hey", (data) => {
-    	console.log("i got hey");
-    	setReceivingCall(true);
+      if (data.bo === "hi") {
+        setReceivingCall(true);
         setCaller(data.from);
-        setCallerSignal(data.signal);   
+        setCallerSignal(data.signal);    
+      } else {
+        setReceivingCall(true);
+        setCaller(data.from);
+        setCallerSignal(data.signal);
+      }
     })
   	}, [uid]); //TODO: agregué el uid como dependencia del useEffect por el warning de la consola. Si no funca la llamada, se revierte
 
-    function callPeer(id) {
-    const peer = new SimplePeer({
-      initiator: true,
-      trickle: false,
-      config: {
-
-        iceServers: [
-            {
-                urls: "stun:numb.viagenie.ca",
-                username: "sultan1640@gmail.com",
-                credential: "98376683"
-            },
-            {
-                urls: "turn:numb.viagenie.ca",
-                username: "sultan1640@gmail.com",
-                credential: "98376683"
-            }
-        ]
-    },
-    offerOptions: { 
-      offerToReceiveAudio: true, 
-      offerToReceiveVideo: true 
-    }
-    });
-
-    peer.on("signal", data => {
-      socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID})
-    })
-
-    peer.on("stream", stream => {
-    	partnerVideo.current.srcObject = stream;
-    });
-
-    socket.current.on("callAccepted", signal => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    })
-
-
+  function callPeer(to) {
+    socket.current.emit("askPeer", {to: to, signal: yourID});
   }
 
-
   function acceptCall() {
-  	setReceivingCall(false);
+    setReceivingCall(false);
     setCallAccepted(true);
-    const peer = new SimplePeer({
+    const peer = new Peer({
       initiator: false,
       trickle: false
-
     });
     peer.on("signal", data => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
@@ -150,38 +105,12 @@ export const MeetingExScreen = () => {
     );
   }
 
-let callbutton;   
-  if (!callAccepted && !receivingCall) {
-    callbutton = (
-      <div>
-        {Object.keys(users).map(key => {
-        	if (users[key].id === request.client._id) {
-            return (
-            <button onClick={() => callPeer(key)}>El cliente esta online</button>
-          );
-          }
-        })}     
-    </div>
-    )
-  }
-
-   let infoAndHung;
-  if (callAccepted) {
-    infoAndHung = (
-      <div>
-        <h3>Informacion sobre la llamada</h3>
-        <p>Hablando con {request.client.nombre} {request.client.apellido} de rut {request.client.rut} sobre la solicud ticket {request._id} con la siguiente descripcion: 
-        {request.descripcionProblema}</p>
-      </div>
-    )
-  }
-
-      let incomingCall;
+  	let incomingCall;
   if (receivingCall) {
     incomingCall = (
       <div>
-        <h1>El cliente de la solicitud quiere comenzar la llamada</h1>
-        <button  onClick={acceptCall}>Aceptar llamada</button>
+        <h1>{caller} is calling you</h1>
+        <button onClick={acceptCall}>Accept</button>
       </div>
     )
   }
@@ -189,23 +118,56 @@ let callbutton;
 	  
 	  return (
 	  	<>
-	  	<div className="m-4 ">
+      <div>
+			<h1 className="m-2">Reunión {callAccepted} </h1>
+			<div className="row m-2">
+			<div className="bg-danger col-md-8 border" style={{height: "75vh"}}>
+			{PartnerVideo}
+			</div>
+			<div className="col-sm-4" style={{height: "75vh"}}>
+				<h3> Información de la solicitud </h3>
+				<p> <strong> ID: </strong> {request.id} </p>
+				<p> <strong> Nivel de urgencia: </strong> {request.categoria} </p>
+				<p> <strong> Estado: </strong> {request.estado} </p>
+				<p> <strong> Fecha de ingreso: </strong> {Date(request.fechaIngreso)} </p>
+				<p> <strong> Descripción del problema: </strong> {request.descripcionProblema} </p> 
+				<hr/>
+				<h3> Información del cliente </h3>
+				<p> <strong> Nombre: </strong> {request.client.nombre} {request.client.apellido} </p>
+				<p> <strong> RUT: </strong> {request.client.rut} </p>
+				<p> <strong> Correo: </strong> {request.client.email} </p>
+				<p> <strong> Teléfono: </strong> {request.client.telefono} </p> 
+				<hr/>
+        {Object.keys(users).map(key => {
+          if (users[key].type === "client") {
+            return (
+            <button onClick={() => callPeer(key)}>Llamar cliente 
+            {(users[key].id === request.client.id) && request.client.nombre + ' ' + request.client.apellido}
+            </button>
+          );
+          }
+          return null
+        })}
+        <hr />
+        {incomingCall}
+			</div>
+			</div>
+			</div>
+
+	  	{/* <div className="m-4 ">
 	  		<h1>Reunión</h1>
 	  		<Container>
       <Row>
         {PartnerVideo}
       </Row>
       <Row>
-      {callbutton}
-      </Row>
-      <Row>
-        {infoAndHung}
+        
       </Row>
       <Row>
         {incomingCall}
       </Row>
     </Container>
-	  	</div>
+	  	</div> */}
 	  	</>
 	  )
 }

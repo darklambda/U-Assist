@@ -19,6 +19,9 @@ export const types = {
     UI_OPEN_REQUEST_MODAL:  'Abrir modal request',
     UI_CLOSE_REQUEST_MODAL: 'Cerrar modal request',
     UI_OPEN_VIEW_MODAL: 'Abrir modal para ver detalles de solicitud',
-    UI_CLOSE_VIEW_MODAL: 'Cerrar modal para ver detalles de solicitud'
+    UI_CLOSE_VIEW_MODAL: 'Cerrar modal para ver detalles de solicitud',
+
+    UI_OPEN_CLIENT_MODAL: 'Abrir modal para pasar info a la vista de reunion',
+    UI_CLOSE_CLIENT_MODAL: 'Cerrar modal para pasar info a la vista de reunion'
 
 }

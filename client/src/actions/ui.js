@@ -25,3 +25,12 @@ export const uiOpenViewModal = (data) => ({
 export const uiCloseViewModal = () => ({
 	type: types.UI_CLOSE_VIEW_MODAL,
 });
+
+export const uiOpenClientViewModal = (data) => ({
+	type: types.UI_OPEN_CLIENT_MODAL,
+	payload: data
+});
+
+export const uiCloseClientViewModal = () => ({
+	type: types.UI_CLOSE_CLIENT_MODAL
+});

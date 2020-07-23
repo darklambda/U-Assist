@@ -5,7 +5,9 @@ const initialState =  {
 	isSolOpen: false,
 	solRequest: null,
 	isViewOpen: false,
-	currentRequest: null
+	currentRequest: null,
+	isViewClientOpen: false,
+	currentClientRequest: null
 }
 
 export const uiReducer = ( state=initialState, action) => {
@@ -44,6 +46,18 @@ export const uiReducer = ( state=initialState, action) => {
 				...state,
 				isViewOpen: false,
 				currentRequest: null
+			}
+		case types.UI_OPEN_CLIENT_MODAL:
+			return {
+				...state,
+				isViewClientOpen: true,
+				currentClientRequest: action.payload
+			}
+		case types.UI_CLOSE_CLIENT_MODAL:
+			return {
+				...state,
+				isViewClientOpen: false,
+				currentClientRequest: null
 			}
 		default:
 			return state;

@@ -28,7 +28,6 @@ export const ExecutiveDashboard = () => {
     }
 
 
-    // TODO: Agrega info del ejecutivo, no del cliente...  
     const handleClickToSolve = (id, descripcion, categoria, request) => {
         dispatch(uiOpenSolModal(request));
     }

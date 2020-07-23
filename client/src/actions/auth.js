@@ -1,9 +1,6 @@
 import { fetchSinToken, fetchConToken } from "../helpers/fetch";
 import { types } from "../types/types";
 import Swal from 'sweetalert2';
-import { Redirect } from "react-router-dom";
-import React from 'react';
-
 
 export const startLogin = (email, password) => {
     return async( dispatch ) => {

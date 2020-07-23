@@ -134,8 +134,9 @@ export const SolveRequest = (request) => {
             const estado = "Solucionada";
             
             try {
+                
                 const id = request.request.id;
-                const descripcionProblema = request.request.descripcionProblema;
+                const descripcionProblema = request.request.descripcion;
                 const categoria = request.request.categoria;
                 dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema}))
                 dispatch(uiCloseModal());
@@ -202,7 +203,7 @@ export const ViewRequest = ({request}) => {
         )
     } else {
         const {estado, solucionProblema, categoria, 
-            descripcionProblema, fechaIngreso, ejecutivo, id} = request;
+            descripcionProblema, fechaIngreso, executive, id} = request;
         let color;
         if (request.categoria === "Alta") {
             color = "danger"
@@ -224,7 +225,7 @@ export const ViewRequest = ({request}) => {
                     <strong> ID: </strong> {id} <br/>
                     <strong> Nivel de urgencia: </strong> {categoria} <br/>
                     <strong> Estado: </strong> {estado} <br/>
-                    {ejecutivo && <strong> ID Ejecutivo: {ejecutivo} </strong>}
+                    {executive && <strong> ID Ejecutivo: {executive.id} </strong>}
                 </div>
                 <div className="card-body overflow-auto">
                     <strong> Fecha de ingreso: </strong> 
@@ -235,11 +236,18 @@ export const ViewRequest = ({request}) => {
                     <p className="card-text">{solucionProblema}</p>
                     <hr />
                     <div className="text-center">
-                        <Link to="/meet">
-                        <button className="btn btn-success mr-5">
-                            Iniciar reunión
-                        </button>
-                        </Link>
+                        { executive ?
+                            <Link to={{
+                                pathname: "/meet",
+                                state: request
+                            }}>
+                            <button className="btn btn-success mr-5">
+                                Iniciar reunión
+                            </button>
+                            </Link>
+                            :
+                            <button className="btn btn-secondary disabled col-4">Procesando solicitud</button>
+                        }
                     </div>
                     
                 </div>
