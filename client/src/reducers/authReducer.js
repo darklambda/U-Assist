@@ -4,7 +4,7 @@ const initialState = {
     checking: true
 }
 
-export const authReducer = ( state = initialState, action ) => {
+export const authReducer = ( state = initialState, action ) => {    
     switch ( action.type ) {
         case types.AUTH_LOGIN:
             return {

@@ -49,6 +49,7 @@ export const startRegister = (nombre, apellido, rut, region, comuna, direccion, 
         const body = await resp.json();
 
         if (body.ok) {
+
             localStorage.setItem('token', body.token);
             localStorage.setItem('token-init-date', new Date().getTime());
             
@@ -56,7 +57,7 @@ export const startRegister = (nombre, apellido, rut, region, comuna, direccion, 
                 uid: body.uid,
                 nombre: body.nombre,
                 apellido: body.apellido,
-                isClient: body.isClient
+                isClient: true
             }) );
         } else {
             if (body.errors) {
