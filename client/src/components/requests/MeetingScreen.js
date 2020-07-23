@@ -152,7 +152,7 @@ function acceptCall() {
 	}
 
 	const handleClickVolver = () => {
-		window.location.replace('/executive-dashboard')
+		window.location.replace('/client-dashboard')
 	  }
 
 	/* agregado solo para que no aparezca el warning ordinario */
