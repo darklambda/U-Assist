@@ -107,7 +107,7 @@ export const RegisterScreen = () => {
     return (
         <>
             <div className="m-4">  
-                <h2> Registro </h2>
+            <h2 className="text-tittle-formulary"> Registro </h2>
                 <hr />
                 <form onSubmit={ handleSubmitForm }>
                     <div className="form-group">

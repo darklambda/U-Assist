@@ -36,7 +36,9 @@ html, body {
     width: 100%;
     padding: 20px;
     background: #fff;
-    box-shadow: 0 2px 5px #ccc; 
+    box-shadow: 0 2px 5px #ccc;
+    margin: auto; 
+
     }
     input {
     width: calc(100% - 10px);
@@ -148,5 +150,48 @@ html, body {
     }
     th, td {
     word-break: keep-all;
+    }
+
+    /*Diseño de botón para ingresar a la página y para crear cuenta*/
+    .button_formulary {
+        background: crimson;
+        border-radius: 6px;
+        height: 50px;
+        transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
+        width: 200px;
+    }
+      /*Al color el mouse encima del botón del formulaio, cambia de color*/
+    .button_formulary:hover{
+        background: red;
+    }
+
+    /*Diseño del elemento del login*/
+    .login_formulary {
+        border: 0px;
+        height: 400px;
+        margin: auto;
+        margin-top:50px;
+        width: 400px;
+    } 
+
+    .text-tittle-formulary {
+        color: #3e464c;
+        font-size: 30px;
+        margin: 30px 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .icon_u_assist {
+        display: block;
+        margin: auto;
+        height: 70px;
+        width: 70px;
+    }
+
+    .background_login_page {
+        background-color:#da0034;
+        height:100%;
+        width:100%;
     }
     }

@@ -41,35 +41,5 @@
     overflow: auto;
 }
 
-/*Diseño de botón para ingresar a la página y para crear cuenta*/
-.button_formulary {
-    background: crimson;
-    border-radius: 6px;
-    height: 50px;
-    transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
-    width: 200px;
-  }
 
-  /*Al color el mouse encima del botón del formulaio, cambia de color*/
-.button_formulary:hover{
-    background: red;
-  }
-
-
-/*Diseño del elemento del login*/
-.login_formulary {
-    background: white;
-    height: 400px;
-    margin: auto;
-    margin-top:50px;
-    width: 700px;
-} 
-
-.text-tittle-formulary {
-    color: #3e464c;
-    font-size: 30px;
-    margin: 30px 0;
-    text-align: center;
-    width: 100%;
-}
 

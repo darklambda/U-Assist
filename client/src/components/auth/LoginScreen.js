@@ -29,12 +29,13 @@ export const LoginScreen = () => {
 
     return (
         <>
+
             <div className="login_formulary">
-                <img src={logo} alt="U-Assist"></img>
-                <h2 className="text-tittle-formulary"> Iniciar Sesión </h2>
                 <hr />
                 <form onSubmit={ handleSubmitForm }>
                     <div className="form-group">
+                    <img className="icon_u_assist" src={logo} alt="U-Assist"></img>
+                    <h2 className="text-tittle-formulary"> Iniciar Sesión </h2>
                         <label> Correo Electrónico </label>
                         <input 
                             type="email" 
@@ -70,7 +71,6 @@ export const LoginScreen = () => {
                     <p> ¿No tienes una cuenta? <Link to="/register"> Crea una nueva </Link> </p>
                 </div>
             </div>
-                
         </>
     )
 }
