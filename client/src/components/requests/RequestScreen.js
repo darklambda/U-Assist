@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
 import { createRequest, startgettingRequests, startUpdatingRequests} from '../../actions/request';
 import './request.css';
-import { uiCloseModal, uiCloseSolModal } from '../../actions/ui';
+import { uiCloseModal, uiCloseSolModal, uiCloseClientViewModal } from '../../actions/ui';
 import Checkbox from '@material-ui/core/Checkbox';
+import Rating from '@material-ui/lab/Rating';
+
 
 
 export const RequestScreen = () => {
@@ -196,13 +198,36 @@ export const SolveRequest = (request) => {
 
 export const ViewRequest = ({request}) => {
 
+    const dispatch = useDispatch();
+    const [value, setValue] = useState(0);
+
+    const updateScore = (e) => {
+
+        const score = e.target.value;
+
+        try {
+            const id = request.id;
+            const estado = request.estado;
+            const descripcionProblema = request.descripcionProblema;
+            const solucionProblema = request.solucionProblema;
+            const categoria = request.categoria;
+            dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score}))
+            dispatch(uiCloseClientViewModal());
+            window.location.reload();
+
+        } catch (error) {
+            console.log("Detallito");
+        }  
+        
+    }
+
     if (!request) {
         return (
             <></>
         )
     } else {
         const {estado, solucionProblema, categoria, 
-            descripcionProblema, fechaIngreso, executive, id} = request;
+            descripcionProblema, fechaIngreso, executive, id, score} = request;
         let color;
         if (request.categoria === "Alta") {
             color = "danger"
@@ -268,6 +293,18 @@ export const ViewRequest = ({request}) => {
                         <strong> Nivel de urgencia: </strong> {categoria} <br/>
                         <strong> Estado: </strong> {estado} <br/>
                         {executive && <p> <strong> Ejecutivo: </strong> {executive.nombre} {executive.apellido} </p>}
+                        <strong> Calidad de atención: </strong>
+                        <div>
+                            <Rating
+                                name="simple-controlled"
+                                value={score}
+                                disabled={ score > 0 || value > 0 }
+                                onChange={ (e,newValue) => {
+                                    setValue(newValue);
+                                    updateScore(e);
+                                } }
+                            />
+                        </div>
                     </div>
                     <div className="card-body overflow-auto">
                         <strong> Fecha de ingreso: </strong> 
@@ -284,3 +321,5 @@ export const ViewRequest = ({request}) => {
     }
 
 }
+
+

@@ -41,6 +41,11 @@ const RequestSchema = Schema({
     executive: {
         type: Schema.Types.ObjectId,
         ref: 'Executive'
+    },
+    score: {
+        type: Number,
+        default: 0,
+        required: true
     }
     
 });
