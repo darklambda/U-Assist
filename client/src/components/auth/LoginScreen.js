@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { startLogin } from '../../actions/auth';
 import { useForm } from "../../hooks/useForm";
+import  logo  from "./favicon.ico";
+
+
 
 export const LoginScreen = () => {
 
@@ -26,8 +29,9 @@ export const LoginScreen = () => {
 
     return (
         <>
-            <div className="m-4">
-                <h2> Iniciar Sesión </h2>
+            <div className="login_formulary">
+                <img src={logo} alt="U-Assist"></img>
+                <h2 className="text-tittle-formulary"> Iniciar Sesión </h2>
                 <hr />
                 <form onSubmit={ handleSubmitForm }>
                     <div className="form-group">
@@ -54,7 +58,8 @@ export const LoginScreen = () => {
                     </div>
                     <div className="text-center">
                         <div className="form-group">
-                            <button type="submit" className="btnSubmit btn btn-primary"> 
+                            <button type="submit" className="button_formulary"> 
+
                                 Iniciar sesión 
                             </button>
                         </div>

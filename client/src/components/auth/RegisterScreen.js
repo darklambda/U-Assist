@@ -223,7 +223,7 @@ export const RegisterScreen = () => {
                     </div>
                     <div className="text-center">
                         <div className="form-group">
-                            <button type="submit" className="btnSubmit btn btn-primary"> Registrarse </button>
+                            <button type="submit" className="button_formulary"> Registrarse </button>
                         </div>
                     </div>
                 </form>
