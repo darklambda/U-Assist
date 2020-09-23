@@ -17,6 +17,7 @@ export const MeetingScreen = () => {
 		const [yourID, setYourID] = useState("");
 		const [users, setUsers] = useState({});
 		const [stream, setStream] = useState();
+		const [audio, setAudio] = useState();
 		const [receivingCall, setReceivingCall] = useState(false);
 		const [caller, setCaller] = useState("");
 		const [callerSignal, setCallerSignal] = useState();
@@ -28,6 +29,7 @@ export const MeetingScreen = () => {
 
 		const userVideo = useRef();
 		const partnerVideo = useRef();
+		const partnerAudio = useRef();
 		const socket = useRef();
 
 	// const {uid, isClient} = useSelector(state => state.auth) || [];
@@ -35,13 +37,19 @@ export const MeetingScreen = () => {
 	// const dispatch = useDispatch();
 
 	useEffect(() => {
-			socket.current = io.connect("ws://localhost:4000");
-			navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
+		socket.current = io.connect("ws://localhost:4000");
+		navigator.mediaDevices.getDisplayMedia({ video: true, audio: false }).then(stream => {
 			setStream(stream);
 				if (userVideo.current) {
 					userVideo.current.srcObject = stream;
 			}
 		})
+		navigator.mediaDevices.getUserMedia({
+			video: false,
+			audio: true
+		}).then( audioStream => {
+			setAudio(audioStream)
+		}).catch(() => { console.log("There's a problem with the audio")});
 		socket.current.emit("signIn", { type: "client", id: uid});
 		socket.current.on("yourID", (id) => {
 			setYourID(id);
@@ -77,7 +85,7 @@ export const MeetingScreen = () => {
 						}
 				]
 		},
-			stream: stream,
+			streams: [stream, audio],
 		});
 
 		peer.on("signal", data => {
@@ -85,6 +93,9 @@ export const MeetingScreen = () => {
 		})
 
 		peer.on("stream", stream => {
+			console.log("?");
+			console.log(stream);
+			partnerAudio.current.srcObject = stream;
 		});
 
 		socket.current.on("callAccepted", signal => {
@@ -104,16 +115,17 @@ export const MeetingScreen = () => {
       initiator: false,
       trickle: false,
       answerOptions: { 
-      answerToReceiveAudio: false, 
+      answerToReceiveAudio: true,
       answerToReceiveVideo: false 
     },
-    stream: stream
+    streams: [stream, audio]
     });
     peer.on("signal", data => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
     peer.on("stream", stream => {
+		partnerAudio.current.srcObject = stream;
     });
 
     peer.signal(callerSignal);
@@ -129,10 +141,14 @@ export const MeetingScreen = () => {
 	let UserVideo;
 		if (stream) {
 			UserVideo = (
+				<>
 					<Video playsInline muted ref={userVideo} autoPlay style={{
 				width:'100%',
 				height:'75vh'
-			}}/>
+			}}/><audio hidden autoPlay id="myaudio" controls ref={partnerAudio}>
+			</audio>
+
+			</>
 			);
 		}
 
@@ -152,7 +168,7 @@ export const MeetingScreen = () => {
 	  }
 
 	/* agregado solo para que no aparezca el warning ordinario */
-	const variables_no_usadas = {callerSignal, setCallerSignal, partnerVideo, hungUp, incomingCall, callAccepted};
+	const variables_no_usadas = {audio, callerSignal, setCallerSignal, partnerVideo, hungUp, incomingCall, callAccepted};
 	console.log(variables_no_usadas && '')
 		
 		return (

@@ -29,6 +29,7 @@ export const MeetingExScreen = () => {
   const [yourID, setYourID] = useState("");
   const [users, setUsers] = useState({});
   const [stream, setStream] = useState();
+  const [audio, setAudio] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
@@ -44,6 +45,12 @@ export const MeetingExScreen = () => {
     	//navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(stream => {
     	//setStream(stream);
     //})
+        navigator.mediaDevices.getUserMedia({
+            video: false,
+            audio: true
+        }).then( audioStream => {
+            setAudio(audioStream)
+        }).catch(() => { console.log("There's a problem with the audio")});
     socket.current.emit("signIn", { type: "executive", id: uid});
     socket.current.on("yourID", (id) => {
       setYourID(id);
@@ -80,8 +87,9 @@ export const MeetingExScreen = () => {
 		},
 		offerOptions: { 
       offerToReceiveAudio: true, 
-      offerToReceiveVideo: true 
-    }
+      offerToReceiveVideo: false
+    },
+    stream: audio,
 	});
 
 		peer.on("signal", data => {
@@ -103,14 +111,17 @@ export const MeetingExScreen = () => {
     setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
-      trickle: false
+      trickle: false,
+      stream: audio
     });
     peer.on("signal", data => {
       socket.current.emit("acceptCall", { signal: data, to: caller })
     })
 
     peer.on("stream", stream => {
+        console.log(stream)
       partnerVideo.current.srcObject = stream;
+
     });
 
     peer.signal(callerSignal);
@@ -141,7 +152,7 @@ export const MeetingExScreen = () => {
     window.location.replace('/executive-dashboard')
   }
 
-  const variables_no_usadas = {stream, setStream, users, callPeer, callAccepted}
+  const variables_no_usadas = {audio, stream, setStream, users, callPeer, callAccepted}
   console.log(variables_no_usadas && '')
 
 	  
