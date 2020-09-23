@@ -24,6 +24,7 @@ app.use( express.json() );
 /* Rutas */
 app.use( '/api/auth', require('./routes/auth') );
 app.use( '/api/requests', require('./routes/requests') );
+app.use( '/api/meetings', require('./routes/meetings') );
 
 const server = http.createServer(app); //NEW
 
