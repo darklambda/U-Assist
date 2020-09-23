@@ -77,9 +77,12 @@ export const startgettingRequests = (event) => {
 export const startUpdatingRequests = (event) => {
     return async(dispatch) => {
         
-        try {
+        try { 
             const resp = await fetchConToken(`requests/${event.id}`, event, 'PUT');
             const body = await resp.json();
+
+            console.log('cliente');
+            console.log(event);
             
             if (body.ok) {
                 dispatch(requestUpdated(event));

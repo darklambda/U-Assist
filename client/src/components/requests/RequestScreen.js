@@ -139,7 +139,8 @@ export const SolveRequest = (request) => {
                 const id = request.request.id;
                 const descripcionProblema = request.request.descripcionProblema;
                 const categoria = request.request.categoria;
-                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema}))
+                const fechaSolucion = Date();
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, fechaSolucion}))
                 dispatch(uiCloseSolModal());
 
             } catch (error) {

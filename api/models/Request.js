@@ -14,6 +14,9 @@ const RequestSchema = Schema({
         type: Date,
         default: Date.now
     },
+    fechaSolucion: {         // fecha en que se soluciona la solicitud
+        type: Date
+    },
     codigo: {               // especie de ID del problema
         type: String,
         default: "TROUBLE_ID",
@@ -41,6 +44,10 @@ const RequestSchema = Schema({
     executive: {
         type: Schema.Types.ObjectId,
         ref: 'Executive'
+    },
+    meet:{
+        type: Schema.Types.ObjectId,
+        ref: 'Meet'
     },
     score: {
         type: Number,

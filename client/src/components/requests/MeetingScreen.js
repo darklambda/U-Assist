@@ -21,7 +21,8 @@ export const MeetingScreen = () => {
 		const [caller, setCaller] = useState("");
 		const [callerSignal, setCallerSignal] = useState();
 		const [callAccepted, setCallAccepted] = useState(false);
-    const [boo, setBoo] = useState(false);
+	const [boo, setBoo] = useState(false);
+	console.log(boo);
 
 		const {uid} = useSelector(state => state.auth);
 
@@ -195,27 +196,6 @@ export const MeetingScreen = () => {
 			</div>
 			</div>
 			</div>
-{/* <div className="m-4 ">
-			
-				<Container>
-					<Row>
-						
-					</Row>
-					<Row>
-						{Object.keys(users).map(key => {
-							if (users[key].type === "executive") {
-								return (
-								<button onClick={() => callPeer(key)}>Llamar ejecutivo {users[key].id}</button>
-							);
-							}
-							return null
-						})}
-					</Row>
-					<Row>
-						{incomingCall}
-					</Row>
-				</Container>
-			</div> */}
 			</>
 		)
 }
