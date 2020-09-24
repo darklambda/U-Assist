@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
 import { createRequest, startgettingRequests, startUpdatingRequests} from '../../actions/request';
 import './request.css';
-import { uiCloseModal, uiCloseSolModal, uiCloseClientViewModal } from '../../actions/ui';
+import { uiCloseModal, uiCloseSolModal } from '../../actions/ui';
 import Checkbox from '@material-ui/core/Checkbox';
 import Rating from '@material-ui/lab/Rating';
 
@@ -200,25 +200,41 @@ export const SolveRequest = (request) => {
 export const ViewRequest = ({request}) => {
 
     const dispatch = useDispatch();
-    const [value, setValue] = useState(0);
+    const [value1, setValue1] = useState(0);
+    const [value2, setValue2] = useState(0);
+    const [value3, setValue3] = useState(0);
 
-    const updateScore = (e) => {
+    const updateScore = (e, num) => {
+        const id = request.id;
+        const estado = request.estado;
+        const descripcionProblema = request.descripcionProblema;
+        const solucionProblema = request.solucionProblema;
+        const categoria = request.categoria;
 
-        const score = e.target.value;
+        if (num === 1) {
+            const score1 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score1}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else if (num === 2) {
+            const score2 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score2}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else if (num === 3) {
+            const score3 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score3}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else return;
 
-        try {
-            const id = request.id;
-            const estado = request.estado;
-            const descripcionProblema = request.descripcionProblema;
-            const solucionProblema = request.solucionProblema;
-            const categoria = request.categoria;
-            dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score}))
-            dispatch(uiCloseClientViewModal());
-            window.location.reload();
-
-        } catch (error) {
-            console.log("Detallito");
-        }  
+        
         
     }
 
@@ -228,7 +244,7 @@ export const ViewRequest = ({request}) => {
         )
     } else {
         const {estado, solucionProblema, categoria, 
-            descripcionProblema, fechaIngreso, executive, id, score} = request;
+            descripcionProblema, fechaIngreso, executive, id, score1, score2, score3} = request;
         let color;
         if (request.categoria === "Alta") {
             color = "danger"
@@ -294,18 +310,36 @@ export const ViewRequest = ({request}) => {
                         <strong> Nivel de urgencia: </strong> {categoria} <br/>
                         <strong> Estado: </strong> {estado} <br/>
                         {executive && <p> <strong> Ejecutivo: </strong> {executive.nombre} {executive.apellido} </p>}
-                        <strong> Calidad de atención: </strong>
-                        <div>
-                            <Rating
-                                name="simple-controlled"
-                                value={score}
-                                disabled={ score > 0 || value > 0 }
-                                onChange={ (e,newValue) => {
-                                    setValue(newValue);
-                                    updateScore(e);
-                                } }
-                            />
-                        </div>
+                        <strong> El ejecutivo se comunicó de forma clara y sencilla: </strong> <br />
+                        <Rating
+                            name="simple-controlled1"
+                            value={ score1 }
+                            disabled={ score1 > 0 || value1 > 0 }
+                            onChange={ (e,newValue) => {
+                                setValue1(newValue);
+                                updateScore(e,1);
+                            } }
+                        /> <br />
+                        <strong> El ejecutivo fue amable y respetuoso: </strong><br />
+                        <Rating
+                            name="simple-controlled2"
+                            value={ score2 }
+                            disabled={ score2 > 0 || value2 > 0 }
+                            onChange={ (e,newValue) => {
+                                setValue2(newValue);
+                                updateScore(e,2);
+                            } }
+                        /><br />
+                        <strong> El ejecutivo logró resolver mi problema: </strong><br />
+                        <Rating
+                            name="simple-controlled3"
+                            value={ score3 }
+                            disabled={ score3 > 0 || value3 > 0 }
+                            onChange={ (e,newValue) => {
+                                setValue3(newValue);
+                                updateScore(e,3);
+                            } }
+                        /> <br />
                     </div>
                     <div className="card-body overflow-auto">
                         <strong> Fecha de ingreso: </strong> 

@@ -49,11 +49,21 @@ const RequestSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Meet'
     },
-    score: {
+    score1: {           // Puntaje asociado a:  “el ejecutivo se comunicó de forma clara y sencilla”
         type: Number,
         default: 0,
         required: true
-    }
+    },
+    score2: {           // Puntaje asociado a:  “el ejecutivo fue amable y respetuoso”
+        type: Number,
+        default: 0,
+        required: true
+    },
+    score3: {           // Puntaje asociado a:  “el ejecutivo logró resolver mi problema”
+        type: Number,
+        default: 0,
+        required: true
+    },
     
 });
 
