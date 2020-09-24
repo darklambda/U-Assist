@@ -22,6 +22,9 @@ export const types = {
     UI_CLOSE_VIEW_MODAL: 'Cerrar modal para ver detalles de solicitud',
 
     UI_OPEN_CLIENT_MODAL: 'Abrir modal para pasar info a la vista de reunion',
-    UI_CLOSE_CLIENT_MODAL: 'Cerrar modal para pasar info a la vista de reunion'
+    UI_CLOSE_CLIENT_MODAL: 'Cerrar modal para pasar info a la vista de reunion',
+
+    UI_OPEN_SCORE_MODAL: "Abrir modal para visualizar la evaluación al ejecutivo",
+    UI_CLOSE_SCORE_MODAL: "Cerrar modal para visualizar la evaluación al ejecutivo",
 
 }

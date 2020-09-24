@@ -34,3 +34,12 @@ export const uiOpenClientViewModal = (data) => ({
 export const uiCloseClientViewModal = () => ({
 	type: types.UI_CLOSE_CLIENT_MODAL
 });
+
+export const uiOpenScoreModal = (data) => ({
+	type: types.UI_OPEN_SCORE_MODAL,
+	payload: data
+})
+
+export const uiCloseScoreModal = () => ({
+	type: types.UI_CLOSE_SCORE_MODAL
+})
