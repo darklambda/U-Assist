@@ -23,6 +23,8 @@ export const ScoreModal = () => {
 
 	const {currentRequest} = useSelector(state => state.ui)
 
+	const { score1, score2, score3 } = currentRequest;
+
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 
@@ -30,8 +32,15 @@ export const ScoreModal = () => {
         setIsOpen( true );
     }
     const closeModal = () => {
-		setIsOpen( false );
-		dispatch(uiCloseScoreModal());
+		if ( score1 > 0 && score2 > 0 && score3 > 0 ){
+			setIsOpen( false );
+			dispatch(uiCloseScoreModal());
+		} else {
+			setIsOpen( false );
+			dispatch(uiCloseScoreModal());
+			window.location.reload();
+		}
+		
     }
 
 	return (
