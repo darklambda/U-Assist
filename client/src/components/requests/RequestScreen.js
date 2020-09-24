@@ -7,6 +7,7 @@ import './request.css';
 import { uiCloseModal, uiCloseSolModal } from '../../actions/ui';
 import Checkbox from '@material-ui/core/Checkbox';
 import Rating from '@material-ui/lab/Rating';
+import { ScoreModal } from './ScoreModal';
 
 
 
@@ -309,6 +310,7 @@ export const ViewRequest = ({request}) => {
                         <strong> ID: </strong> {id} <br/>
                         <strong> Nivel de urgencia: </strong> {categoria} <br/>
                         <strong> Estado: </strong> {estado} <br/>
+                        <ScoreModal />
                         {executive && <p> <strong> Ejecutivo: </strong> {executive.nombre} {executive.apellido} </p>}
                         <strong> El ejecutivo se comunicó de forma clara y sencilla: </strong> <br />
                         <Rating
@@ -355,6 +357,15 @@ export const ViewRequest = ({request}) => {
         }
     }
 
+}
+
+export const ScoreBoard = ({request}) => {
+    console.log(request);
+    return(
+        <>
+            <h1>Hola Mundo</h1>
+        </>
+    )
 }
 
 
