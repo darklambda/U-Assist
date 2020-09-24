@@ -33,7 +33,7 @@ const createMeeting = async(req, res=response) => {
 
         let fechaReunion = meet.fecha;
 
-        let nombreEjecutivo = ;// buscar el nombre del ejecutivo a cargo de req.rid
+        let nombreEjecutivo = '';// buscar el nombre del ejecutivo a cargo de req.rid
 
         // Se manda el correo
 
