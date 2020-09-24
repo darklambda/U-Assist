@@ -106,10 +106,11 @@ export const RegisterScreen = () => {
 
     return (
         <>
+
             <div className="m-4">  
-            <h2 className="text-tittle-formulary"> Registro </h2>
+            <h2 className="text-tittle-formulary"> Registro cuenta nueva </h2>
                 <hr />
-                <form onSubmit={ handleSubmitForm }>
+                <form style={{height: "900px", width: "400px", borderRadius: "15px 15px 15px 15px"}} onSubmit={ handleSubmitForm }>
                     <div className="form-group">
                         <label>Nombres</label>
                         <input 
