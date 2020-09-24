@@ -24,7 +24,7 @@ const sendEmail = async(req, res=response) => {
     // buscar toda la info necesaria, mandar correo y enviar respuesta
     //const request = new Request( req.body );
 
-    
+
 
     var mailOptions = {
         from: 'kiwiteamcl@gmail.com',
