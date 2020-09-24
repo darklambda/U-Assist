@@ -1,4 +1,5 @@
 const { response } = require('express');
+const Meet = require('../models/Meet')
 const Request = require('../models/Request');
 const Executive = require('../models/Executive');
 const Client = require('../models/Client');
@@ -19,37 +20,42 @@ var transporter = nodemailer.createTransport(smtpConfig);
 
 
 
-const sendEmail = async(req, res=response) => {
+const createMeeting = async(req, res=response) => {
 
-    // buscar toda la info necesaria, mandar correo y enviar respuesta
-    //const request = new Request( req.body );
+    // Se crea la nueva reunion
+    const meet = new Meet( req.body );
 
-
-
-    var mailOptions = {
-        from: 'kiwiteamcl@gmail.com',
-        to: 'rodrigo.gomez@sansano.usm.cl',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-    };
-
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
-
-    return res.json({ok: true})
-    /*
     try {
-        request.client = req.uid;
-        const requestSaved = await request.save();
+        meet.request = req.rid;
+        const meetSaved = await meet.save();
+
+        // Se buscan los datos correspondientes al correo a enviar
+
+        let fechaReunion = meet.fecha;
+
+        let nombreEjecutivo = ;// buscar el nombre del ejecutivo a cargo de req.rid
+
+        // Se manda el correo
+
+        let mailOptions = {
+            from: 'kiwiteamcl@gmail.com',
+            to: 'rodrigo.gomez@sansano.usm.cl',
+            subject: 'U-Assists | Nueva reunión agendada',
+            text: 'Usted tiene una nueva reunion con ' + nombreEjecutivo + ' a las ' + fechaReunion
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
         return res.json({
             ok: true,
-            request: requestSaved,
-            client: request.client
+            meet: meetSaved,
+            request: meet.request
         });
     } catch (error) {
         console.log(error);
@@ -58,9 +64,8 @@ const sendEmail = async(req, res=response) => {
             msg: 'Contáctese con el administrador'
         });
     }
-    */
 }
 
 module.exports = {
-    sendEmail
+    createMeeting
 }
