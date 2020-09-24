@@ -196,7 +196,7 @@ html, body {
     }
 
     .login {
-        margin: 20px auto;
+        margin: 0 auto;
         width: 300px;
         background-color: #FFF;
         padding: 20px;
