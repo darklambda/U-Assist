@@ -200,15 +200,18 @@ export const SolveRequest = (request) => {
 
 export const ViewRequest = ({request}) => {
 
+<<<<<<< HEAD
    
 
+=======
+>>>>>>> 8b35b0c4cdb85347a441ce93cd23f0ebc8db7616
     if (!request) {
         return (
             <></>
         )
     } else {
         const {estado, solucionProblema, categoria, 
-            descripcionProblema, fechaIngreso, executive, id, score1, score2, score3} = request;
+            descripcionProblema, fechaIngreso, executive, id} = request;
         let color;
         if (request.categoria === "Alta") {
             color = "danger"
@@ -291,6 +294,7 @@ export const ViewRequest = ({request}) => {
     }
 
 }
+<<<<<<< HEAD
 
 export const ScoreBoard = ({request}) => {
     const dispatch = useDispatch();
@@ -372,6 +376,86 @@ export const ScoreBoard = ({request}) => {
                             } }
                         /> <br />
 
+=======
+
+export const ScoreBoard = ({request}) => {
+
+    const dispatch = useDispatch();
+    const [value1, setValue1] = useState(0);
+    const [value2, setValue2] = useState(0);
+    const [value3, setValue3] = useState(0);
+
+    const { score1, score2, score3 } = request;
+
+    const updateScore = (e, num) => {
+        const id = request.id;
+        const estado = request.estado;
+        const descripcionProblema = request.descripcionProblema;
+        const solucionProblema = request.solucionProblema;
+        const categoria = request.categoria;
+
+        if (num === 1) {
+            const score1 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score1}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else if (num === 2) {
+            const score2 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score2}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else if (num === 3) {
+            const score3 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score3}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else return;
+
+    }
+
+    console.log(value1, value2, value3);
+    return(
+        <>
+            <h1>Hola Mundo</h1>
+            <div>
+                <strong> El ejecutivo se comunicó de forma clara y sencilla: </strong> <br />
+                    <Rating
+                        name="simple-controlled1"
+                        value={ score1 }
+                        disabled={ score1 > 0 || value1 > 0 }
+                        onChange={ (e,newValue) => {
+                            setValue1(newValue);
+                            updateScore(e,1);
+                        } }
+                    /> <br />
+                    <strong> El ejecutivo fue amable y respetuoso: </strong><br />
+                    <Rating
+                        name="simple-controlled2"
+                        value={ score2 }
+                        disabled={ score2 > 0 || value2 > 0 }
+                        onChange={ (e,newValue) => {
+                            setValue2(newValue);
+                            updateScore(e,2);
+                        } }
+                    /><br />
+                    <strong> El ejecutivo logró resolver mi problema: </strong><br />
+                    <Rating
+                        name="simple-controlled3"
+                        value={ score3 }
+                        disabled={ score3 > 0 || value3 > 0 }
+                        onChange={ (e,newValue) => {
+                            setValue3(newValue);
+                            updateScore(e,3);
+                        } }
+                    /> <br />
+            </div>
+>>>>>>> 8b35b0c4cdb85347a441ce93cd23f0ebc8db7616
         </>
     )
 }
