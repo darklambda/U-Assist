@@ -29,9 +29,7 @@ export const LoginScreen = () => {
 
     return (
         <>
-            <div style={{height: "100vh", width: "100vw", backgroundColor: "#da0333"}}>
-            <div className="m-4">
-                <hr />
+            <div style={{height: "100vh", width: "100vw", backgroundColor: "#da0333", paddingTop: "100px"}}>
                 <form  style={{height: "450px", width: "400px", borderRadius: "15px 15px 15px 15px"}} onSubmit={ handleSubmitForm }>
                     <div className="form-group">
                     <img className="icon_u_assist" src={logo} alt="U-Assist"></img>
@@ -68,9 +66,7 @@ export const LoginScreen = () => {
                     <div className="text-center">
                         <p> ¿No tienes una cuenta? <Link to="/register"> Crea una nueva </Link> </p>
                     </div>
-                </form>
-                <hr />
-            </div>    
+                </form>    
             </div>
         </>
     )
