@@ -11,7 +11,9 @@ const customStyles = {
 	right: 'auto',
 	bottom: 'auto',
 	marginRight: '-50%',
-	transform: 'translate(-50%, -50%)'
+	transform: 'translate(-50%, -50%)',
+	height: '500px',
+	width: '500px',
 	}
 };
 
@@ -44,9 +46,9 @@ export const ScoreModal = () => {
 				closeTimeoutMS={200}
 			>
 			<ScoreBoard request={ currentRequest } />
-
-			<button onClick={closeModal}>Terminar Evaluación</button>
-
+			<div className="text-center">
+				<button className="button_formulary" onClick={closeModal}>Terminar Evaluación</button>
+			</div>
 			</Modal>
 		</>
 		)

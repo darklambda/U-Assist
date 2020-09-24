@@ -200,44 +200,7 @@ export const SolveRequest = (request) => {
 
 export const ViewRequest = ({request}) => {
 
-    const dispatch = useDispatch();
-    const [value1, setValue1] = useState(0);
-    const [value2, setValue2] = useState(0);
-    const [value3, setValue3] = useState(0);
-
-    const updateScore = (e, num) => {
-        const id = request.id;
-        const estado = request.estado;
-        const descripcionProblema = request.descripcionProblema;
-        const solucionProblema = request.solucionProblema;
-        const categoria = request.categoria;
-
-        if (num === 1) {
-            const score1 = e.target.value;
-            try {
-                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score1}))
-            } catch (error) {
-                console.log("Detallito");
-            }  
-        } else if (num === 2) {
-            const score2 = e.target.value;
-            try {
-                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score2}))
-            } catch (error) {
-                console.log("Detallito");
-            }  
-        } else if (num === 3) {
-            const score3 = e.target.value;
-            try {
-                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score3}))
-            } catch (error) {
-                console.log("Detallito");
-            }  
-        } else return;
-
-        
-        
-    }
+   
 
     if (!request) {
         return (
@@ -310,9 +273,75 @@ export const ViewRequest = ({request}) => {
                         <strong> ID: </strong> {id} <br/>
                         <strong> Nivel de urgencia: </strong> {categoria} <br/>
                         <strong> Estado: </strong> {estado} <br/>
-                        <ScoreModal />
                         {executive && <p> <strong> Ejecutivo: </strong> {executive.nombre} {executive.apellido} </p>}
-                        <strong> El ejecutivo se comunicó de forma clara y sencilla: </strong> <br />
+                        <ScoreModal />
+                    </div>
+                    <div className="card-body overflow-auto">
+                        <strong> Fecha de ingreso: </strong> 
+                        <p className="card-text">{Date(fechaIngreso)}</p>
+                        <strong> Descripción: </strong> 
+                        <p className="card-text">{descripcionProblema}</p>
+                        <strong> Solución: </strong> 
+                        <p className="card-text">{solucionProblema}</p>            
+                    </div>
+                </div>
+                </>
+            )
+        }
+    }
+
+}
+
+export const ScoreBoard = ({request}) => {
+    const dispatch = useDispatch();
+    const [value1, setValue1] = useState(0);
+    const [value2, setValue2] = useState(0);
+    const [value3, setValue3] = useState(0);
+
+    const { score1, score2, score3} = request;
+
+    const updateScore = (e, num) => {
+        const id = request.id;
+        const estado = request.estado;
+        const descripcionProblema = request.descripcionProblema;
+        const solucionProblema = request.solucionProblema;
+        const categoria = request.categoria;
+
+        if (num === 1) {
+            const score1 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score1}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else if (num === 2) {
+            const score2 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score2}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else if (num === 3) {
+            const score3 = e.target.value;
+            try {
+                dispatch(startUpdatingRequests({id, categoria, estado, descripcionProblema, solucionProblema, score3}))
+            } catch (error) {
+                console.log("Detallito");
+            }  
+        } else return;
+
+        
+        
+    }
+    console.log(request);
+    return(
+        <>
+            <h3 style={{textAlign: "center"}}>¡Necesitamos tu evaluación!</h3>
+            <p style={{textAlign: "justify"}}>Tras haber recibido la atención de nuestro ejecutivo, te solicitamos que evalues la calidad 
+                del servicio que se te fue entregado. Para ello, se le pide que evalue desde nota mínima 1 estrella hasta
+                nota máxima 5 estrellas.
+            </p>
+            <strong> El ejecutivo se comunicó de forma clara y sencilla: </strong> <br />
                         <Rating
                             name="simple-controlled1"
                             value={ score1 }
@@ -342,28 +371,7 @@ export const ViewRequest = ({request}) => {
                                 updateScore(e,3);
                             } }
                         /> <br />
-                    </div>
-                    <div className="card-body overflow-auto">
-                        <strong> Fecha de ingreso: </strong> 
-                        <p className="card-text">{Date(fechaIngreso)}</p>
-                        <strong> Descripción: </strong> 
-                        <p className="card-text">{descripcionProblema}</p>
-                        <strong> Solución: </strong> 
-                        <p className="card-text">{solucionProblema}</p>            
-                    </div>
-                </div>
-                </>
-            )
-        }
-    }
 
-}
-
-export const ScoreBoard = ({request}) => {
-    console.log(request);
-    return(
-        <>
-            <h1>Hola Mundo</h1>
         </>
     )
 }
