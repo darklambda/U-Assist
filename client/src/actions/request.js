@@ -105,6 +105,31 @@ export const startUpdatingRequests = (event) => {
     }
 }
 
+export const getScore = (event) => {
+    return async(dispatch) => {
+        try {
+            
+            const resp = await fetchConToken('requests/rating', event);
+            const body = await resp.json();
+
+            console.log("body", body);
+            console.log(event);
+
+            if (body.ok) {
+                dispatch( requestScore(event) );
+            } else {
+                Swal.fire('', body.errors.descripcionProblema.msg, 'error');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+
+
 const requestLoaded  = (data) => ({type: types.REQUEST_LOADED, payload:data});
 const newRequest     = (data) => ({type: types.REQUEST_CREATION, payload: data});
 const requestUpdated = (data) => ({type: types.REQUEST_UPDATED, payload: data});
+const requestScore = (data) => ({type: types.REQUEST_SCORE, payload: data});

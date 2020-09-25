@@ -4,7 +4,7 @@ import { Navebar } from '../ui/Navebar'
 import {SelectRequestModal} from './SelectRequestModal';
 import { uiOpenModal, uiOpenSolModal } from '../../actions/ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { executiveRequestStartLoading } from '../../actions/request';
+import { executiveRequestStartLoading, getScore } from '../../actions/request';
 import {SolveRequestModal} from '../requests/SolveRequestModal'
 import CardDeck from 'react-bootstrap/CardDeck'
 
@@ -13,6 +13,8 @@ import CardDeck from 'react-bootstrap/CardDeck'
 export const ExecutiveDashboard = () => {
 
     const {requests} = useSelector(state => state.reqs) || [];
+
+    const {uid} = useSelector(state => state.auth);
     
     // const {uid, isClient} = useSelector(state => state.auth);   
 
@@ -170,11 +172,17 @@ export const ExecutiveDashboard = () => {
         }
      }
 
+     const showScore = () => {
+        dispatch( getScore({uid}) );
+        //console.log(datos);
+     }
+
     return (
         <div>
             <Navebar />
-            <div className="m-4">
+            <div className="d-flex justify-content-between m-4 align-items-center">
                 <h2>Dashboard Ejecutivo</h2>
+                <button className="btn btn-sm btn-outline-primary h-50 w-25" onClick={ showScore } >Mi puntaje</button>
             </div>
             <hr />
             <div className="d-flex justify-content-between m-4 align-items-center">

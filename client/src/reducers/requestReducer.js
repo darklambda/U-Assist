@@ -37,6 +37,13 @@ export const requestReducer = (state=initialState, action ) => {
 					action.payload
 				]
 			}	
+		case types.REQUEST_SCORE:
+			return {
+				...state,
+				scores: [
+					action.payload
+				]
+			}
 		default:
 			return state;
 	}

@@ -12,7 +12,8 @@ const { getRequestsClient,
         createRequest, 
         updateRequest, 
         deleteRequest, 
-        getAvailableRequests} = require('../controllers/requests');
+        getAvailableRequests,
+        getRating} = require('../controllers/requests');
 
 const router = Router();
 
@@ -22,6 +23,8 @@ router.use(validarJWT);
 router.get('/', getRequestsClient);
 router.get('/executive-requests', getRequestsExecutive);
 router.get('/available-requests', getAvailableRequests);
+//test
+router.get('/rating', getRating);
 
 /* Crear solicitud */
 router.post('/', 
