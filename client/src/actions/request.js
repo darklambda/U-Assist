@@ -109,11 +109,9 @@ export const getScore = (event) => {
     return async(dispatch) => {
         try {
             
-            const resp = await fetchConToken('requests/rating', event);
+            const resp = await fetchConToken('requests/rating', event.uid);
             const body = await resp.json();
 
-            console.log("body", body);
-            console.log(event);
 
             if (body.ok) {
                 dispatch( requestScore(event) );

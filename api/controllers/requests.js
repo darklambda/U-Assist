@@ -156,8 +156,8 @@ const getAvailableRequests = async(req, res=response) => {
 }
 
 const getRating = async(req, res=response) => {
-    const requests = await Request.find({executive: req.body.uid}, {score1:1, score2:1, score3:1})
-    console.log(req.body);
+    const requests = await Request.find({executive: req.uid}, {score1:1, score2:1, score3:1})
+    console.log(requests);
 
     return res.json({
         ok:true,
